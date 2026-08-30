@@ -45,7 +45,7 @@
             width: 100vw;
         }
 
-        /* Left Side: Large Hero Image (Wide Visibility) */
+        /* Left Side: Large Hero Image */
         .hero-banner {
             flex: 1.2;
             background: radial-gradient(circle, rgba(20, 123, 150, 0.15) 0%, rgba(13, 92, 117, 0.3) 100%), #eaf4f8;
@@ -56,7 +56,6 @@
             padding: 40px;
             position: relative;
             border-right: 1px solid rgba(20, 123, 150, 0.15);
-            transition: all 0.3s ease;
         }
 
         .hero-image {
@@ -79,24 +78,20 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px 100px 20px; /* Extra bottom padding for keyboard clearance */
+            padding: 40px 20px;
             background: #ffffff;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            transition: padding-bottom 0.3s ease;
         }
 
         .content-box {
             width: 100%;
             max-width: 440px;
             text-align: center;
-            transition: transform 0.3s ease;
         }
 
         /* Branding Text */
         .brand-header {
             margin-bottom: 24px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .mobile-logo-img {
@@ -132,7 +127,6 @@
         .form-group {
             text-align: left;
             margin-bottom: 16px;
-            scroll-margin-top: 20px; /* Smooth scrolling positioning */
         }
 
         .form-group label {
@@ -148,10 +142,11 @@
             padding: 14px 16px;
             border: 1.5px solid #d1d5db;
             border-radius: 12px;
-            font-size: 16px; /* 16px prevents automatic mobile Safari zoom */
+            font-size: 16px;
             outline: none;
             transition: all 0.2s ease;
             background-color: #fff;
+            cursor: pointer;
         }
 
         .form-group input:focus, .form-group select:focus {
@@ -211,7 +206,65 @@
         }
 
         /* Views */
-        .hidden { display: none; }
+        .hidden { display: none !important; }
+
+        /* Pop-up Input Modal (Like Select Picker) */
+        .input-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(13, 92, 117, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 60px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .input-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .input-modal-card {
+            background: #ffffff;
+            width: 90%;
+            max-width: 420px;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            transform: translateY(-20px);
+            transition: transform 0.25s ease;
+        }
+
+        .input-modal-overlay.active .input-modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--brand-dark-teal);
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--brand-primary-teal);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            outline: none;
+            margin-bottom: 16px;
+        }
 
         /* Map UI */
         .map-card {
@@ -367,18 +420,10 @@
 
             .hero-banner {
                 flex: none;
-                height: 30vh;
-                padding: 15px;
+                height: 35vh;
+                padding: 20px;
                 border-right: none;
                 border-bottom: 1px solid rgba(20, 123, 150, 0.15);
-            }
-
-            .hero-banner.keyboard-open {
-                height: 0vh;
-                padding: 0;
-                opacity: 0;
-                overflow: hidden;
-                border-bottom: none;
             }
 
             .hero-image {
@@ -387,7 +432,7 @@
 
             .app-panel {
                 flex: 1;
-                padding: 24px 16px 120px 16px;
+                padding: 24px 16px;
                 justify-content: flex-start;
             }
 
@@ -398,27 +443,17 @@
             .brand-title {
                 font-size: 28px;
             }
-
-            /* Shift active form fields higher when keyboard appears */
-            body.keyboard-active .app-panel {
-                padding-bottom: 250px;
-            }
-            
-            body.keyboard-active .brand-header {
-                opacity: 0.3;
-                transform: scale(0.9);
-            }
         }
     </style>
 </head>
 <body>
 
     <div class="full-screen-container">
-        <div class="hero-banner" id="heroBanner">
+        <div class="hero-banner">
             <img src="pic.png" alt="Mama Fua Cleaning Services" class="hero-image">
         </div>
 
-        <div class="app-panel" id="appPanel">
+        <div class="app-panel">
             <div class="content-box">
                 <div class="brand-header">
                     <img src="pic.png" alt="Mama Fua Logo" class="mobile-logo-img">
@@ -431,12 +466,12 @@
                 <div id="booking-form">
                     <div class="form-group">
                         <label for="fullName">Your Full Name</label>
-                        <input type="text" id="fullName" placeholder="Enter your full name">
+                        <input type="text" id="fullName" placeholder="Tap to enter full name" readonly onclick="openModal('fullName', 'Enter Your Full Name', 'text', 'John Doe')">
                     </div>
 
                     <div class="form-group">
                         <label for="phoneNumber">M-Pesa Phone Number</label>
-                        <input type="tel" id="phoneNumber" placeholder="0712345678" maxlength="12" inputmode="numeric">
+                        <input type="tel" id="phoneNumber" placeholder="Tap to enter phone number" readonly onclick="openModal('phoneNumber', 'Enter M-Pesa Phone Number', 'tel', '0712345678')">
                     </div>
 
                     <div class="form-group">
@@ -479,7 +514,7 @@
 
                     <div class="form-group">  
                         <label for="payPhone">M-Pesa Phone Number</label>  
-                        <input type="text" id="payPhone" maxlength="12" inputmode="numeric">  
+                        <input type="text" id="payPhone" placeholder="Tap to edit phone number" readonly onclick="openModal('payPhone', 'Confirm M-Pesa Phone Number', 'tel', '0712345678')">  
                     </div>  
 
                     <button id="payBtn" class="btn-primary" onclick="handlePayment()">Pay with M-Pesa</button>  
@@ -490,32 +525,58 @@
         </div>
     </div>
 
+    <div class="input-modal-overlay" id="inputModal">
+        <div class="input-modal-card">
+            <h3 class="modal-title" id="modalTitle">Fill Field</h3>
+            <input type="text" id="modalInputField" class="modal-input" placeholder="">
+            <button class="btn-primary" onclick="saveModalInput()">Done</button>
+        </div>
+    </div>
+
     <script>
         const BACKEND_URL = "https://tilo-three.vercel.app";  
         let pollTimer = null;  
+        let activeTargetInputId = null;
 
-        // Keyboard Rise-Up Focus Handling for Mobile Screens
-        const inputFields = document.querySelectorAll('input, select');
-        const heroBanner = document.getElementById('heroBanner');
-        const appPanel = document.getElementById('appPanel');
+        /* Pop-up Modal Input Handler */
+        function openModal(inputId, titleText, inputType, placeholderText) {
+            activeTargetInputId = inputId;
+            const targetInput = document.getElementById(inputId);
+            const modal = document.getElementById('inputModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalInput = document.getElementById('modalInputField');
 
-        inputFields.forEach(input => {
-            input.addEventListener('focus', (e) => {
-                document.body.classList.add('keyboard-active');
-                if (window.innerWidth <= 850) {
-                    heroBanner.classList.add('keyboard-open');
-                }
-                
-                // Smoothly scroll active element into view above the virtual keyboard
-                setTimeout(() => {
-                    e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            });
+            modalTitle.innerText = titleText;
+            modalInput.type = inputType;
+            modalInput.placeholder = placeholderText;
+            modalInput.value = targetInput.value;
 
-            input.addEventListener('blur', () => {
-                document.body.classList.remove('keyboard-active');
-                heroBanner.classList.remove('keyboard-open');
-            });
+            modal.classList.add('active');
+            
+            setTimeout(() => {
+                modalInput.focus();
+            }, 100);
+        }
+
+        function saveModalInput() {
+            const modalInput = document.getElementById('modalInputField');
+            if (activeTargetInputId) {
+                const targetInput = document.getElementById(activeTargetInputId);
+                targetInput.value = modalInput.value;
+            }
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('inputModal').classList.remove('active');
+            activeTargetInputId = null;
+        }
+
+        // Close modal when pressing Enter inside popup
+        document.getElementById('modalInputField').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                saveModalInput();
+            }
         });
 
         const femaleNames = [ 
@@ -549,7 +610,7 @@
             const gender = document.getElementById('gender').value; 
 
             if (!name || !phone) { 
-                alert('Please enter both your name and phone number.'); 
+                alert('Please tap and fill both your name and phone number.'); 
                 return; 
             } 
 
