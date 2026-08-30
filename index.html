@@ -56,6 +56,7 @@
             padding: 40px;
             position: relative;
             border-right: 1px solid rgba(20, 123, 150, 0.15);
+            transition: all 0.3s ease;
         }
 
         .hero-image {
@@ -78,20 +79,24 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            padding: 40px 20px 100px 20px; /* Extra bottom padding for keyboard clearance */
             background: #ffffff;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transition: padding-bottom 0.3s ease;
         }
 
         .content-box {
             width: 100%;
             max-width: 440px;
             text-align: center;
+            transition: transform 0.3s ease;
         }
 
         /* Branding Text */
         .brand-header {
             margin-bottom: 24px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .mobile-logo-img {
@@ -127,6 +132,7 @@
         .form-group {
             text-align: left;
             margin-bottom: 16px;
+            scroll-margin-top: 20px; /* Smooth scrolling positioning */
         }
 
         .form-group label {
@@ -142,7 +148,7 @@
             padding: 14px 16px;
             border: 1.5px solid #d1d5db;
             border-radius: 12px;
-            font-size: 15px;
+            font-size: 16px; /* 16px prevents automatic mobile Safari zoom */
             outline: none;
             transition: all 0.2s ease;
             background-color: #fff;
@@ -361,10 +367,18 @@
 
             .hero-banner {
                 flex: none;
-                height: 35vh;
-                padding: 20px;
+                height: 30vh;
+                padding: 15px;
                 border-right: none;
                 border-bottom: 1px solid rgba(20, 123, 150, 0.15);
+            }
+
+            .hero-banner.keyboard-open {
+                height: 0vh;
+                padding: 0;
+                opacity: 0;
+                overflow: hidden;
+                border-bottom: none;
             }
 
             .hero-image {
@@ -373,7 +387,7 @@
 
             .app-panel {
                 flex: 1;
-                padding: 24px 16px;
+                padding: 24px 16px 120px 16px;
                 justify-content: flex-start;
             }
 
@@ -384,17 +398,27 @@
             .brand-title {
                 font-size: 28px;
             }
+
+            /* Shift active form fields higher when keyboard appears */
+            body.keyboard-active .app-panel {
+                padding-bottom: 250px;
+            }
+            
+            body.keyboard-active .brand-header {
+                opacity: 0.3;
+                transform: scale(0.9);
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="full-screen-container">
-        <div class="hero-banner">
+        <div class="hero-banner" id="heroBanner">
             <img src="pic.png" alt="Mama Fua Cleaning Services" class="hero-image">
         </div>
 
-        <div class="app-panel">
+        <div class="app-panel" id="appPanel">
             <div class="content-box">
                 <div class="brand-header">
                     <img src="pic.png" alt="Mama Fua Logo" class="mobile-logo-img">
@@ -469,6 +493,30 @@
     <script>
         const BACKEND_URL = "https://tilo-three.vercel.app";  
         let pollTimer = null;  
+
+        // Keyboard Rise-Up Focus Handling for Mobile Screens
+        const inputFields = document.querySelectorAll('input, select');
+        const heroBanner = document.getElementById('heroBanner');
+        const appPanel = document.getElementById('appPanel');
+
+        inputFields.forEach(input => {
+            input.addEventListener('focus', (e) => {
+                document.body.classList.add('keyboard-active');
+                if (window.innerWidth <= 850) {
+                    heroBanner.classList.add('keyboard-open');
+                }
+                
+                // Smoothly scroll active element into view above the virtual keyboard
+                setTimeout(() => {
+                    e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+
+            input.addEventListener('blur', () => {
+                document.body.classList.remove('keyboard-active');
+                heroBanner.classList.remove('keyboard-open');
+            });
+        });
 
         const femaleNames = [ 
             "Sarah A.", "Elena L.", "Jessica T.", "Grace M.", "Mary W.",  
