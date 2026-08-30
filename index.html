@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mama Fua - Clean Home. Fresh Life.</title>
+
+    <meta property="og:title" content="Mama Fua - On-Demand Professional Cleaning">
+    <meta property="og:description" content="Clean Home. Fresh Life. Book a trusted, professional cleaner in minutes with M-Pesa.">
+    <meta property="og:image" content="pic.png">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/png" href="pic.png">
+
+    <style>
+        :root {
+            --brand-dark-teal: #0d5c75;
+            --brand-primary-teal: #147b96;
+            --brand-light-teal: #e8f4f8;
+            --brand-orange: #e75b43;
+            --brand-bg: #f4f8fa;
+            --text-dark: #1f2937;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Full Screen Layout */
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+            background-color: var(--brand-bg);
+            color: var(--text-dark);
+        }
+
+        .full-screen-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100vw;
+        }
+
+        /* Left Side: Large Hero Image (Wide Visibility) */
+        .hero-banner {
+            flex: 1.2;
+            background: radial-gradient(circle, rgba(20, 123, 150, 0.15) 0%, rgba(13, 92, 117, 0.3) 100%), #eaf4f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+            border-right: 1px solid rgba(20, 123, 150, 0.15);
+        }
+
+        .hero-image {
+            max-width: 85%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 20px;
+            filter: drop-shadow(0 20px 30px rgba(13, 92, 117, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Right Side: Interactive App Panel */
+        .app-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: #ffffff;
+            overflow-y: auto;
+        }
+
+        .content-box {
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+        }
+
+        /* Branding Text */
+        .brand-header {
+            margin-bottom: 24px;
+        }
+
+        .mobile-logo-img {
+            display: none;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--brand-primary-teal);
+            margin: 0 auto 12px auto;
+        }
+
+        .brand-title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .brand-title .mama { color: var(--brand-dark-teal); }
+        .brand-title .fua { color: var(--brand-orange); }
+
+        .tagline {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--brand-primary-teal);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 6px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--brand-dark-teal);
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--brand-primary-teal);
+            box-shadow: 0 0 0 3px rgba(20, 123, 150, 0.15);
+        }
+
+        .amount-display {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--brand-orange);
+            text-align: center;
+            background-color: var(--brand-light-teal);
+            border: 1.5px solid var(--brand-primary-teal);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--brand-orange);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+            margin-top: 8px;
+            box-shadow: 0 6px 16px rgba(231, 91, 67, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #d04d36;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            background-color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .btn-text {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 14px;
+            width: 100%;
+            text-align: center;
+            text-decoration: underline;
+        }
+
+        /* Views */
+        .hidden { display: none; }
+
+        /* Map UI */
+        .map-card {
+            position: relative;
+            height: 150px;
+            background: #dceef4;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid rgba(20, 123, 150, 0.2);
+        }
+
+        .map-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(var(--brand-primary-teal) 1.5px, transparent 1.5px),
+                linear-gradient(to right, rgba(20, 123, 150, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(20, 123, 150, 0.1) 1px, transparent 1px);
+            background-size: 18px 18px, 36px 36px, 36px 36px;
+            opacity: 0.4;
+        }
+
+        .cleaner-pin {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background-color: var(--brand-dark-teal);
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            box-shadow: 0 4px 8px rgba(13, 92, 117, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .pin-1 { top: 15%; left: 18%; } 
+        .pin-2 { top: 55%; left: 25%; } 
+        .pin-3 { top: 20%; right: 22%; } 
+        .pin-4 { bottom: 15%; right: 28%; } 
+        .pin-5 { top: 48%; left: 55%; } 
+        .pin-6 { top: 70%; left: 78%; } 
+
+        @keyframes pulse { 
+            0% { transform: scale(1); } 
+            50% { transform: scale(1.1); } 
+            100% { transform: scale(1); } 
+        }
+
+        /* Cleaner List */
+        .cleaner-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .cleaner-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: var(--brand-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cleaner-item:hover, .cleaner-item.selected {
+            border-color: var(--brand-primary-teal);
+            background: var(--brand-light-teal);
+        }
+
+        .cleaner-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--brand-dark-teal);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .details p {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: left;
+        }
+
+        .details span {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            text-align: left;
+        }
+
+        .price-tag {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--brand-orange);
+            background: #fdf2f0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(231, 91, 67, 0.2);
+        }
+
+        /* Payment Status UI */
+        #status { 
+            margin-top: 14px; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-size: 0.9rem; 
+            line-height: 1.4; 
+            text-align: center;
+        } 
+
+        .success { background: #e6f4ea; color: #1e7e34; border: 1px solid #c3e6cb; } 
+        .error { background: #f8d7da; color: #dc3545; border: 1px solid #f5c6cb; } 
+        .info { background: var(--brand-light-teal); color: var(--brand-dark-teal); border: 1px solid rgba(20, 123, 150, 0.3); } 
+
+        .loader { 
+            display: inline-block; width: 16px; height: 16px; 
+            border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; 
+            border-radius: 50%; animation: spin 1s linear infinite; 
+            margin-right: 8px; vertical-align: middle; 
+        } 
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 850px) {
+            .full-screen-container {
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            .hero-banner {
+                flex: none;
+                height: 35vh;
+                padding: 20px;
+                border-right: none;
+                border-bottom: 1px solid rgba(20, 123, 150, 0.15);
+            }
+
+            .hero-image {
+                max-height: 90%;
+            }
+
+            .app-panel {
+                flex: 1;
+                padding: 24px 16px;
+                justify-content: flex-start;
+            }
+
+            .mobile-logo-img {
+                display: block;
+            }
+
+            .brand-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="full-screen-container">
+        <div class="hero-banner">
+            <img src="pic.png" alt="Mama Fua Cleaning Services" class="hero-image">
+        </div>
+
+        <div class="app-panel">
+            <div class="content-box">
+                <div class="brand-header">
+                    <img src="pic.png" alt="Mama Fua Logo" class="mobile-logo-img">
+                    <h1 class="brand-title">
+                        <span class="mama">Mama</span> <span class="fua">Fua</span>
+                    </h1>
+                    <p class="tagline">Clean Home. Fresh Life.</p>
+                </div>
+
+                <div id="booking-form">
+                    <div class="form-group">
+                        <label for="fullName">Your Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">M-Pesa Phone Number</label>
+                        <input type="tel" id="phoneNumber" placeholder="0712345678" maxlength="12" inputmode="numeric">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Cleaner Gender Preference</label>
+                        <select id="gender">
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-primary" onclick="findCleaners()">Get Cleaner Now</button>
+                </div>
+
+                <div id="results-step" class="hidden">
+                    <div class="map-card">
+                        <div class="map-bg"></div>
+                        <div class="cleaner-pin pin-1">🧹</div>
+                        <div class="cleaner-pin pin-2">🧹</div>
+                        <div class="cleaner-pin pin-3">🧹</div>
+                        <div class="cleaner-pin pin-4">🧹</div>
+                        <div class="cleaner-pin pin-5">🧹</div>
+                        <div class="cleaner-pin pin-6">🧹</div>
+                    </div>
+
+                    <div class="cleaner-list" id="cleaners-container"></div>
+
+                    <button class="btn-primary" id="proceed-btn" onclick="goToPayment()">Pay Deposit & Get Cleaner</button>
+                    <button class="btn-text" onclick="resetForm()">← Change details</button>
+                </div>
+
+                <div id="payment-step" class="hidden">
+                    <p style="font-size: 0.85rem; color: var(--brand-orange); font-weight: 600; margin-bottom: 12px; text-align: center;">
+                        Do not refresh the page after entering your M-Pesa PIN.<br>Wait for confirmation.
+                    </p>
+
+                    <div class="form-group">  
+                        <label for="amount">Deposit Amount (KES)</label>  
+                        <input type="text" id="amount" class="amount-display" readonly>  
+                    </div>  
+
+                    <div class="form-group">  
+                        <label for="payPhone">M-Pesa Phone Number</label>  
+                        <input type="text" id="payPhone" maxlength="12" inputmode="numeric">  
+                    </div>  
+
+                    <button id="payBtn" class="btn-primary" onclick="handlePayment()">Pay with M-Pesa</button>  
+                    <div id="status"></div>
+                    <button class="btn-text" onclick="backToCleaners()">← Choose another cleaner</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = "https://tilo-three.vercel.app";  
+        let pollTimer = null;  
+
+        const femaleNames = [ 
+            "Sarah A.", "Elena L.", "Jessica T.", "Grace M.", "Mary W.",  
+            "Anita K.", "Faith N.", "Mercy C.", "Brenda O.", "Lucy K.", 
+            "Joy W.", "Caroline M.", "Esther N.", "Purity K.", "Alice M." 
+        ]; 
+
+        const maleNames = [ 
+            "Marcus K.", "David R.", "John P.", "Brian O.", "Kevin M.",  
+            "Samuel K.", "Peter N.", "Joseph M.", "Daniel W.", "James O.", 
+            "Alex K.", "Emmanuel N.", "Victor M.", "Dennis O.", "George K." 
+        ]; 
+
+        const prices = [150, 200, 240, 290, 320, 330]; 
+        let selectedPrice = prices[0]; 
+        let selectedCleanerName = "";
+
+        function shuffleArray(array) { 
+            return [...array].sort(() => Math.random() - 0.5); 
+        } 
+
+        function getInitials(name) { 
+            const parts = name.split(' '); 
+            return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase(); 
+        } 
+
+        function findCleaners() { 
+            const name = document.getElementById('fullName').value.trim(); 
+            const phone = document.getElementById('phoneNumber').value.trim(); 
+            const gender = document.getElementById('gender').value; 
+
+            if (!name || !phone) { 
+                alert('Please enter both your name and phone number.'); 
+                return; 
+            } 
+
+            const pool = gender === 'female' ? femaleNames : maleNames; 
+            const shuffled = shuffleArray(pool).slice(0, 6); 
+
+            const container = document.getElementById('cleaners-container'); 
+            container.innerHTML = ''; 
+
+            shuffled.forEach((cleanerName, index) => { 
+                const price = prices[index]; 
+                const rating = (4.7 + Math.random() * 0.3).toFixed(1); 
+                const jobs = Math.floor(Math.random() * 150) + 20; 
+
+                const card = document.createElement('div'); 
+                card.className = `cleaner-item ${index === 0 ? 'selected' : ''}`; 
+                card.onclick = () => selectCleaner(card, price, cleanerName); 
+
+                card.innerHTML = ` 
+                    <div class="cleaner-info"> 
+                        <div class="avatar">${getInitials(cleanerName)}</div> 
+                        <div class="details"> 
+                            <p>${cleanerName}</p> 
+                            <span>★ ${rating} (${jobs} jobs)</span> 
+                        </div> 
+                    </div> 
+                    <div class="price-tag">KES ${price}</div> 
+                `; 
+
+                container.appendChild(card); 
+            }); 
+
+            selectedPrice = prices[0]; 
+            selectedCleanerName = shuffled[0];
+            updateProceedButtonText(); 
+
+            document.getElementById('booking-form').classList.add('hidden'); 
+            document.getElementById('results-step').classList.remove('hidden'); 
+        } 
+
+        function selectCleaner(element, price, cleanerName) { 
+            document.querySelectorAll('.cleaner-item').forEach(el => el.classList.remove('selected')); 
+            element.classList.add('selected'); 
+            selectedPrice = price; 
+            selectedCleanerName = cleanerName;
+            updateProceedButtonText(); 
+        } 
+
+        function updateProceedButtonText() { 
+            document.getElementById('proceed-btn').innerText = `Pay KES ${selectedPrice} Deposit & Get Cleaner`; 
+        } 
+
+        function goToPayment() {
+            const initialPhone = document.getElementById('phoneNumber').value.trim();
+            document.getElementById('payPhone').value = initialPhone;
+            document.getElementById('amount').value = selectedPrice;
+
+            document.getElementById('results-step').classList.add('hidden');
+            document.getElementById('payment-step').classList.remove('hidden');
+        }
+
+        function backToCleaners() {
+            document.getElementById('payment-step').classList.add('hidden');
+            document.getElementById('results-step').classList.remove('hidden');
+            document.getElementById('status').innerHTML = '';
+            document.getElementById('status').className = '';
+        }
+
+        function resetForm() { 
+            document.getElementById('booking-form').classList.remove('hidden'); 
+            document.getElementById('results-step').classList.add('hidden'); 
+        } 
+
+        /* M-Pesa Integration */
+        function showStatus(message, type = "info") {  
+            const div = document.getElementById('status');  
+            div.className = type;  
+            div.innerHTML = message;  
+        }  
+      
+        function resetButton() {  
+            const btn = document.getElementById('payBtn');  
+            btn.disabled = false;  
+            btn.innerText = "Pay with M-Pesa";  
+        }  
+      
+        async function handlePayment() {  
+            const phone = document.getElementById('payPhone').value.trim();  
+            let amount = parseFloat(document.getElementById('amount').value);  
+            const btn = document.getElementById('payBtn');  
+      
+            if (!phone || phone.length < 9) {  
+                showStatus("❌ Please enter a valid phone number", "error");  
+                return;  
+            }  
+      
+            btn.disabled = true;  
+            btn.innerHTML = '<span class="loader"></span> Sending STK Push...';  
+            showStatus("STK Push sent.<br>Check your phone and enter M-Pesa PIN.", "info");  
+      
+            try {  
+                const res = await fetch(`${BACKEND_URL}/api/stk-push`, {  
+                    method: "POST",  
+                    headers: {  
+                        "Content-Type": "application/json",  
+                        "ngrok-skip-browser-warning": "true"  
+                    },  
+                    body: JSON.stringify({   
+                        amount: amount,   
+                        phone_number: phone   
+                    })  
+                });  
+      
+                const data = await res.json();  
+      
+                if (data.success) {  
+                    startPolling();  
+                } else {  
+                    showStatus("❌ Failed to start payment", "error");  
+                    resetButton();  
+                }  
+            } catch (err) {  
+                showStatus("❌ Connection error. Please check network.", "error");  
+                resetButton();  
+            }  
+        }  
+      
+        function startPolling() {  
+            let attempts = 0;  
+            const maxAttempts = 50;  
+      
+            if (pollTimer) clearInterval(pollTimer);  
+      
+            pollTimer = setInterval(async () => {  
+                attempts++;  
+      
+                try {  
+                    const res = await fetch(`${BACKEND_URL}/api/status`, {  
+                        headers: { "ngrok-skip-browser-warning": "true" }  
+                    });  
+      
+                    const data = await res.json();  
+      
+                    if (data.status === true && data.response) {  
+                        const code = data.response.ResultCode;  
+      
+                        if (code === 0) {  
+                            clearInterval(pollTimer);  
+                            showStatus(`<strong>✅ Successful!</strong><br>You will receive details now. Cleaner <strong>${selectedCleanerName}</strong> has been assigned to you.`, "success");  
+                            const btn = document.getElementById('payBtn');
+                            btn.innerHTML = "Payment Complete";
+                            return;  
+                        }  
+                        else if (code === 1032) {  
+                            clearInterval(pollTimer);  
+                            showStatus("❌ Payment was cancelled.<br>Please try again.", "error");  
+                            resetButton();  
+                            return;  
+                        }  
+                        else {  
+                            clearInterval(pollTimer);  
+                            let msg = data.response.ResultDesc || "Payment failed";  
+                            if (code === 2001) msg = "Wrong M-Pesa PIN entered.";  
+                            showStatus(`❌ ${msg}`, "error");  
+                            resetButton();  
+                            return;  
+                        }  
+                    }  
+      
+                    if (attempts >= maxAttempts) {  
+                        clearInterval(pollTimer);  
+                        showStatus("⏰ Request timed out.<br>Check your M-Pesa or try again.", "error");  
+                        resetButton();  
+                    }  
+                } catch (err) {  
+                    console.error("Polling error:", err);  
+                }  
+            }, 3000);  
+        }  
+    </script> 
+</body> 
+</html>
