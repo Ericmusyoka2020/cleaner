@@ -351,6 +351,185 @@
             background: #dceef4;
         }
 
+        .map-expand-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            padding: 8px 10px;
+            border: 1px solid rgba(13, 92, 117, 0.25);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--brand-dark-teal);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(13, 92, 117, 0.18);
+            transition: all 0.2s ease;
+        }
+
+        .map-expand-btn:hover {
+            background: var(--brand-primary-teal);
+            color: #ffffff;
+            border-color: var(--brand-primary-teal);
+        }
+
+        .map-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(13, 92, 117, 0.72);
+            backdrop-filter: blur(4px);
+        }
+
+        .map-modal-card {
+            width: min(920px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .map-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 20px 12px;
+        }
+
+        .map-modal-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--brand-dark-teal);
+        }
+
+        .map-modal-subtitle {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .map-modal-close {
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background: #f9fafb;
+            color: var(--brand-dark-teal);
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .map-modal-map {
+            height: min(58vh, 520px);
+            margin: 0 20px;
+            overflow: hidden;
+            border: 1px solid rgba(20, 123, 150, 0.2);
+            border-radius: 16px;
+            background: #dceef4;
+        }
+
+        .map-modal-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .map-details {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            padding: 16px 20px 20px;
+        }
+
+        .map-detail {
+            padding: 12px;
+            border: 1px solid rgba(20, 123, 150, 0.15);
+            border-radius: 12px;
+            background: var(--brand-bg);
+        }
+
+        .map-detail span {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .map-detail strong {
+            display: block;
+            margin-top: 4px;
+            font-size: 14px;
+            color: var(--brand-dark-teal);
+            overflow-wrap: anywhere;
+        }
+
+        .map-detail-link {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid rgba(20, 123, 150, 0.15);
+            border-radius: 12px;
+            background: var(--brand-light-teal);
+        }
+
+        .map-detail-link span {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .map-detail-link a {
+            color: var(--brand-primary-teal);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .map-detail-link a:hover {
+            text-decoration: underline;
+        }
+
+        body.map-modal-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 600px) {
+            .map-modal-overlay {
+                padding: 8px;
+            }
+
+            .map-modal-map {
+                height: 45vh;
+                margin: 0 12px;
+            }
+
+            .map-details {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+
+            .map-detail-link {
+                grid-column: 1;
+            }
+        }
+
         /* Cleaner List */
         .cleaner-list {
             display: flex;
@@ -532,6 +711,7 @@
                         <p id="locationStatus" class="location-status" role="status" aria-live="polite"></p>
                         <div class="map-card booking-map" id="bookingMapCard">
                             <iframe id="bookingMap" class="location-map" title="Your current location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                            <button type="button" class="map-expand-btn" onclick="openLocationMap()" aria-label="Expand location map">Expand</button>
                             <div id="bookingMapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
                         </div>
                     </div>
@@ -550,6 +730,7 @@
                 <div id="results-step" class="hidden">
                     <div class="map-card">
                         <iframe id="locationMap" class="location-map" title="Your exact location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                        <button type="button" class="map-expand-btn" onclick="openLocationMap()" aria-label="Expand location map">Expand</button>
                         <div id="mapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
                     </div>
                     <p id="locationDisplay" style="text-align:center; font-size:13px; color:var(--brand-primary-teal); font-weight:600; margin-bottom:12px;"></p>
@@ -588,6 +769,43 @@
             <h3 class="modal-title" id="modalTitle">Fill Field</h3>
             <input type="text" id="modalInputField" class="modal-input" placeholder="">
             <button class="btn-primary" onclick="saveModalInput()">Done</button>
+        </div>
+    </div>
+
+    <div class="map-modal-overlay hidden" id="locationMapModal" role="dialog" aria-modal="true" aria-labelledby="locationMapModalTitle">
+        <div class="map-modal-card">
+            <div class="map-modal-header">
+                <div>
+                    <h3 id="locationMapModalTitle">Your Location</h3>
+                    <p class="map-modal-subtitle">Expanded map and GPS details</p>
+                </div>
+                <button type="button" class="map-modal-close" onclick="closeLocationMap()" aria-label="Close expanded map">×</button>
+            </div>
+            <div class="map-modal-map">
+                <iframe id="expandedLocationMap" title="Expanded current location" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+            </div>
+            <div class="map-details">
+                <div class="map-detail">
+                    <span>Coordinates</span>
+                    <strong id="expandedCoordinates">Not detected</strong>
+                </div>
+                <div class="map-detail">
+                    <span>Accuracy</span>
+                    <strong id="expandedAccuracy">Not available</strong>
+                </div>
+                <div class="map-detail">
+                    <span>Captured</span>
+                    <strong id="expandedCaptured">Not available</strong>
+                </div>
+                <div class="map-detail">
+                    <span>Location source</span>
+                    <strong>Device GPS</strong>
+                </div>
+                <div class="map-detail-link">
+                    <span>Open full map</span>
+                    <a id="expandedMapsLink" href="#" target="_blank" rel="noopener noreferrer">View in Google Maps</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -714,7 +932,7 @@
                     const latitude = Number(position.coords.latitude.toFixed(6));
                     const longitude = Number(position.coords.longitude.toFixed(6));
                     const accuracy = Math.round(position.coords.accuracy);
-                    currentCoordinates = { latitude, longitude, accuracy };
+                    currentCoordinates = { latitude, longitude, accuracy, capturedAt: new Date().toISOString() };
 
                     showLocationOnMap(latitude, longitude, accuracy);
                     setLocationStatus(`Location detected • Accuracy: ±${accuracy} m`, "success");
@@ -754,6 +972,46 @@
             const locationDisplay = document.getElementById('locationDisplay');
             locationDisplay.textContent = `Exact GPS location: ${latitude}, ${longitude}${accuracy ? ` • Accuracy: ±${accuracy} m` : ''}`;
         }
+
+        function openLocationMap() {
+            if (!currentCoordinates) {
+                setLocationStatus("Detect your GPS location before expanding the map.", "error");
+                return;
+            }
+
+            const { latitude, longitude, accuracy, capturedAt } = currentCoordinates;
+            const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}&z=16&output=embed`;
+            const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}`;
+
+            document.getElementById('expandedLocationMap').src = mapUrl;
+            document.getElementById('expandedCoordinates').textContent = `${latitude}, ${longitude}`;
+            document.getElementById('expandedAccuracy').textContent = `±${accuracy} m`;
+            document.getElementById('expandedCaptured').textContent = capturedAt ? new Date(capturedAt).toLocaleString() : "Not available";
+            document.getElementById('expandedMapsLink').href = mapsUrl;
+
+            const modal = document.getElementById('locationMapModal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('map-modal-open');
+        }
+
+        function closeLocationMap() {
+            const modal = document.getElementById('locationMapModal');
+            modal.classList.add('hidden');
+            document.body.classList.remove('map-modal-open');
+            document.getElementById('expandedLocationMap').src = '';
+        }
+
+        document.getElementById('locationMapModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeLocationMap();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !document.getElementById('locationMapModal').classList.contains('hidden')) {
+                closeLocationMap();
+            }
+        });
 
         function findCleaners() {
             const name = document.getElementById('fullName').value.trim();
