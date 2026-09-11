@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,6 +57,7 @@
             padding: 40px;
             position: relative;
             border-right: 1px solid rgba(20, 123, 150, 0.15);
+            transition: all 0.3s ease;
         }
 
         .hero-image {
@@ -78,20 +80,24 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 40px 20px 100px 20px;
             background: #ffffff;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transition: padding-bottom 0.3s ease;
         }
 
         .content-box {
             width: 100%;
             max-width: 440px;
             text-align: center;
+            transition: transform 0.3s ease;
         }
 
         /* Branding Text */
         .brand-header {
             margin-bottom: 24px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .mobile-logo-img {
@@ -127,6 +133,7 @@
         .form-group {
             text-align: left;
             margin-bottom: 16px;
+            scroll-margin-top: 20px; /* Smooth scrolling positioning */
         }
 
         .form-group label {
@@ -153,6 +160,47 @@
             border-color: var(--brand-primary-teal);
             box-shadow: 0 0 0 3px rgba(20, 123, 150, 0.15);
         }
+
+        .gps-panel {
+            margin-bottom: 16px;
+        }
+
+        .btn-gps {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--brand-primary-teal);
+            border-radius: 12px;
+            background-color: var(--brand-light-teal);
+            color: var(--brand-dark-teal);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-gps:hover {
+            background-color: var(--brand-primary-teal);
+            color: #ffffff;
+            border-color: var(--brand-primary-teal);
+        }
+
+        .btn-gps:disabled {
+            background-color: #9ca3af;
+            border-color: #9ca3af;
+            color: #ffffff;
+            cursor: not-allowed;
+        }
+
+        .location-status {
+            min-height: 18px;
+            margin-top: 6px;
+            font-size: 12px;
+            line-height: 1.35;
+            color: var(--text-muted);
+        }
+
+        .location-status.error { color: #dc3545; }
+        .location-status.success { color: #1e7e34; }
 
         .amount-display {
             font-size: 1.6rem;
@@ -269,7 +317,7 @@
         /* Map UI */
         .map-card {
             position: relative;
-            height: 150px;
+            height: 260px;
             background: #dceef4;
             border-radius: 16px;
             overflow: hidden;
@@ -277,44 +325,30 @@
             border: 1px solid rgba(20, 123, 150, 0.2);
         }
 
-        .map-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(var(--brand-primary-teal) 1.5px, transparent 1.5px),
-                linear-gradient(to right, rgba(20, 123, 150, 0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(20, 123, 150, 0.1) 1px, transparent 1px);
-            background-size: 18px 18px, 36px 36px, 36px 36px;
-            opacity: 0.4;
+        .map-card.booking-map {
+            height: 180px;
+            margin-top: 4px;
         }
 
-        .cleaner-pin {
+        .location-map {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .map-placeholder {
             position: absolute;
-            width: 32px;
-            height: 32px;
-            background-color: var(--brand-dark-teal);
-            color: #ffffff;
-            border-radius: 50%;
+            inset: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
-            box-shadow: 0 4px 8px rgba(13, 92, 117, 0.4);
-            animation: pulse 2s infinite;
-        }
-
-        .pin-1 { top: 15%; left: 18%; } 
-        .pin-2 { top: 55%; left: 25%; } 
-        .pin-3 { top: 20%; right: 22%; } 
-        .pin-4 { bottom: 15%; right: 28%; } 
-        .pin-5 { top: 48%; left: 55%; } 
-        .pin-6 { top: 70%; left: 78%; } 
-
-        @keyframes pulse { 
-            0% { transform: scale(1); } 
-            50% { transform: scale(1.1); } 
-            100% { transform: scale(1); } 
+            padding: 20px;
+            color: var(--brand-dark-teal);
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            background: #dceef4;
         }
 
         /* Cleaner List */
@@ -420,10 +454,18 @@
 
             .hero-banner {
                 flex: none;
-                height: 35vh;
-                padding: 20px;
+                height: 30vh;
+                padding: 15px;
                 border-right: none;
                 border-bottom: 1px solid rgba(20, 123, 150, 0.15);
+            }
+
+            .hero-banner.keyboard-open {
+                height: 0vh;
+                padding: 0;
+                opacity: 0;
+                overflow: hidden;
+                border-bottom: none;
             }
 
             .hero-image {
@@ -432,7 +474,7 @@
 
             .app-panel {
                 flex: 1;
-                padding: 24px 16px;
+                padding: 24px 16px 120px 16px;
                 justify-content: flex-start;
             }
 
@@ -443,17 +485,27 @@
             .brand-title {
                 font-size: 28px;
             }
+
+            /* Shift active form fields higher when keyboard appears */
+            body.keyboard-active .app-panel {
+                padding-bottom: 250px;
+            }
+            
+            body.keyboard-active .brand-header {
+                opacity: 0.3;
+                transform: scale(0.9);
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="full-screen-container">
-        <div class="hero-banner">
+        <div class="hero-banner" id="heroBanner">
             <img src="pic.png" alt="Mama Fua Cleaning Services" class="hero-image">
         </div>
 
-        <div class="app-panel">
+        <div class="app-panel" id="appPanel">
             <div class="content-box">
                 <div class="brand-header">
                     <img src="pic.png" alt="Mama Fua Logo" class="mobile-logo-img">
@@ -474,6 +526,16 @@
                         <input type="tel" id="phoneNumber" placeholder="Tap to enter phone number" readonly onclick="openModal('phoneNumber', 'Enter M-Pesa Phone Number', 'tel', '0712345678')">
                     </div>
 
+                    <div class="form-group gps-panel">
+                        <label>Your Location (GPS)</label>
+                        <button type="button" class="btn-gps" id="locationButton" onclick="getCurrentLocation()">Use My Current Location</button>
+                        <p id="locationStatus" class="location-status" role="status" aria-live="polite"></p>
+                        <div class="map-card booking-map" id="bookingMapCard">
+                            <iframe id="bookingMap" class="location-map" title="Your current location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                            <div id="bookingMapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="gender">Cleaner Gender Preference</label>
                         <select id="gender">
@@ -487,14 +549,10 @@
 
                 <div id="results-step" class="hidden">
                     <div class="map-card">
-                        <div class="map-bg"></div>
-                        <div class="cleaner-pin pin-1">🧹</div>
-                        <div class="cleaner-pin pin-2">🧹</div>
-                        <div class="cleaner-pin pin-3">🧹</div>
-                        <div class="cleaner-pin pin-4">🧹</div>
-                        <div class="cleaner-pin pin-5">🧹</div>
-                        <div class="cleaner-pin pin-6">🧹</div>
+                        <iframe id="locationMap" class="location-map" title="Your exact location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                        <div id="mapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
                     </div>
+                    <p id="locationDisplay" style="text-align:center; font-size:13px; color:var(--brand-primary-teal); font-weight:600; margin-bottom:12px;"></p>
 
                     <div class="cleaner-list" id="cleaners-container"></div>
 
@@ -534,9 +592,11 @@
     </div>
 
     <script>
-        const BACKEND_URL = "https://tilo-three.vercel.app";  
-        let pollTimer = null;  
+        const BACKEND_URL = "https://tilo-three.vercel.app";
+        let pollTimer = null;
         let activeTargetInputId = null;
+        let currentCoordinates = null;
+        let locationRequestInProgress = false;
 
         /* Pop-up Modal Input Handler */
         function openModal(inputId, titleText, inputType, placeholderText) {
@@ -579,6 +639,30 @@
             }
         });
 
+        // Keyboard Rise-Up Focus Handling for Mobile Screens
+        const inputFields = document.querySelectorAll('input, select');
+        const heroBanner = document.getElementById('heroBanner');
+        const appPanel = document.getElementById('appPanel');
+
+        inputFields.forEach(input => {
+            input.addEventListener('focus', (e) => {
+                document.body.classList.add('keyboard-active');
+                if (window.innerWidth <= 850) {
+                    heroBanner.classList.add('keyboard-open');
+                }
+                
+                // Smoothly scroll active element into view above the virtual keyboard
+                setTimeout(() => {
+                    e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+
+            input.addEventListener('blur', () => {
+                document.body.classList.remove('keyboard-active');
+                heroBanner.classList.remove('keyboard-open');
+            });
+        });
+
         const femaleNames = [ 
             "Sarah A.", "Elena L.", "Jessica T.", "Grace M.", "Mary W.",  
             "Anita K.", "Faith N.", "Mercy C.", "Brenda O.", "Lucy K.", 
@@ -602,54 +686,128 @@
         function getInitials(name) { 
             const parts = name.split(' '); 
             return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase(); 
-        } 
+        }
 
-        function findCleaners() { 
-            const name = document.getElementById('fullName').value.trim(); 
-            const phone = document.getElementById('phoneNumber').value.trim(); 
-            const gender = document.getElementById('gender').value; 
+        function setLocationStatus(message, type = "") {
+            const status = document.getElementById('locationStatus');
+            status.className = `location-status ${type}`.trim();
+            status.textContent = message;
+        }
 
-            if (!name || !phone) { 
-                alert('Please tap and fill both your name and phone number.'); 
-                return; 
-            } 
+        function getCurrentLocation() {
+            const button = document.getElementById('locationButton');
 
-            const pool = gender === 'female' ? femaleNames : maleNames; 
-            const shuffled = shuffleArray(pool).slice(0, 6); 
+            if (!navigator.geolocation) {
+                setLocationStatus("Location is not supported by this browser.", "error");
+                return;
+            }
 
-            const container = document.getElementById('cleaners-container'); 
-            container.innerHTML = ''; 
+            if (locationRequestInProgress) return;
 
-            shuffled.forEach((cleanerName, index) => { 
-                const price = prices[index]; 
-                const rating = (4.7 + Math.random() * 0.3).toFixed(1); 
-                const jobs = Math.floor(Math.random() * 150) + 20; 
+            locationRequestInProgress = true;
+            button.disabled = true;
+            button.textContent = "Detecting...";
+            setLocationStatus("Finding your exact location...");
 
-                const card = document.createElement('div'); 
-                card.className = `cleaner-item ${index === 0 ? 'selected' : ''}`; 
-                card.onclick = () => selectCleaner(card, price, cleanerName); 
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = Number(position.coords.latitude.toFixed(6));
+                    const longitude = Number(position.coords.longitude.toFixed(6));
+                    const accuracy = Math.round(position.coords.accuracy);
+                    currentCoordinates = { latitude, longitude, accuracy };
 
-                card.innerHTML = ` 
-                    <div class="cleaner-info"> 
-                        <div class="avatar">${getInitials(cleanerName)}</div> 
-                        <div class="details"> 
-                            <p>${cleanerName}</p> 
-                            <span>★ ${rating} (${jobs} jobs)</span> 
-                        </div> 
-                    </div> 
-                    <div class="price-tag">KES ${price}</div> 
-                `; 
+                    showLocationOnMap(latitude, longitude, accuracy);
+                    setLocationStatus(`Location detected • Accuracy: ±${accuracy} m`, "success");
+                    locationRequestInProgress = false;
+                    button.disabled = false;
+                    button.textContent = "Update Location";
+                },
+                (error) => {
+                    const messages = {
+                        1: "Location permission was denied. Allow GPS access to continue.",
+                        2: "Unable to determine your location. Check your GPS and try again.",
+                        3: "Location request timed out. Try again."
+                    };
+                    setLocationStatus(messages[error.code] || "Unable to detect your location.", "error");
+                    locationRequestInProgress = false;
+                    button.disabled = false;
+                    button.textContent = "Retry GPS";
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 60000
+                }
+            );
+        }
 
-                container.appendChild(card); 
-            }); 
+        function showLocationOnMap(latitude, longitude, accuracy = 0) {
+            const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}&z=17&output=embed`;
+            const bookingMap = document.getElementById('bookingMap');
+            const locationMap = document.getElementById('locationMap');
 
-            selectedPrice = prices[0]; 
+            bookingMap.src = mapUrl;
+            locationMap.src = mapUrl;
+            document.getElementById('bookingMapPlaceholder').classList.add('hidden');
+            document.getElementById('mapPlaceholder').classList.add('hidden');
+
+            const locationDisplay = document.getElementById('locationDisplay');
+            locationDisplay.textContent = `Exact GPS location: ${latitude}, ${longitude}${accuracy ? ` • Accuracy: ±${accuracy} m` : ''}`;
+        }
+
+        function findCleaners() {
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const gender = document.getElementById('gender').value;
+
+            if (!name || !phone) {
+                alert('Please fill in your name and phone number.');
+                return;
+            }
+
+            if (!currentCoordinates) {
+                setLocationStatus("Allow GPS access to continue.", "error");
+                getCurrentLocation();
+                return;
+            }
+
+            const pool = gender === 'female' ? femaleNames : maleNames;
+            const shuffled = shuffleArray(pool).slice(0, 6);
+
+            const container = document.getElementById('cleaners-container');
+            container.innerHTML = '';
+
+            shuffled.forEach((cleanerName, index) => {
+                const price = prices[index];
+                const rating = (4.7 + Math.random() * 0.3).toFixed(1);
+                const jobs = Math.floor(Math.random() * 150) + 20;
+
+                const card = document.createElement('div');
+                card.className = `cleaner-item ${index === 0 ? 'selected' : ''}`;
+                card.onclick = () => selectCleaner(card, price, cleanerName);
+
+                card.innerHTML = `
+                    <div class="cleaner-info">
+                        <div class="avatar">${getInitials(cleanerName)}</div>
+                        <div class="details">
+                            <p>${cleanerName}</p>
+                            <span>★ ${rating} (${jobs} jobs)</span>
+                        </div>
+                    </div>
+                    <div class="price-tag">KES ${price}</div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            selectedPrice = prices[0];
             selectedCleanerName = shuffled[0];
-            updateProceedButtonText(); 
+            updateProceedButtonText();
+            showLocationOnMap(currentCoordinates.latitude, currentCoordinates.longitude, currentCoordinates.accuracy);
 
-            document.getElementById('booking-form').classList.add('hidden'); 
-            document.getElementById('results-step').classList.remove('hidden'); 
-        } 
+            document.getElementById('booking-form').classList.add('hidden');
+            document.getElementById('results-step').classList.remove('hidden');
+        }
 
         function selectCleaner(element, price, cleanerName) { 
             document.querySelectorAll('.cleaner-item').forEach(el => el.classList.remove('selected')); 
@@ -720,7 +878,10 @@
                     },  
                     body: JSON.stringify({   
                         amount: amount,   
-                        phone_number: phone   
+                        phone_number: phone,
+                        latitude: currentCoordinates ? currentCoordinates.latitude : null,
+                        longitude: currentCoordinates ? currentCoordinates.longitude : null,
+                        accuracy: currentCoordinates ? currentCoordinates.accuracy : null
                     })  
                 });  
       
