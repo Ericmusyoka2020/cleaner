@@ -1,9 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mama Fua - Clean Home. Fresh Life.</title>
+
+    <meta property="og:title" content="Mama Fua - On-Demand Professional Cleaning">
+    <meta property="og:description" content="Clean Home. Fresh Life. Book or find a trusted, professional cleaner in minutes.">
+    <meta property="og:image" content="pic.png">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/png" href="pic.png">
 
     <style>
         :root {
@@ -23,9 +31,11 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
+        /* Full Screen Layout */
         html, body {
             height: 100%;
             width: 100%;
+            overflow-x: hidden;
             background-color: var(--brand-bg);
             color: var(--text-dark);
         }
@@ -36,13 +46,18 @@
             width: 100vw;
         }
 
+        /* Left Side: Large Hero Image */
         .hero-banner {
             flex: 1.2;
             background: radial-gradient(circle, rgba(20, 123, 150, 0.15) 0%, rgba(13, 92, 117, 0.3) 100%), #eaf4f8;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 40px;
+            position: relative;
+            border-right: 1px solid rgba(20, 123, 150, 0.15);
+            transition: all 0.3s ease;
         }
 
         .hero-image {
@@ -50,32 +65,56 @@
             max-height: 70vh;
             object-fit: contain;
             border-radius: 20px;
+            filter: drop-shadow(0 20px 30px rgba(13, 92, 117, 0.2));
+            transition: transform 0.3s ease;
         }
 
+        .hero-image:hover {
+            transform: scale(1.02);
+        }
+
+        /* Right Side: Interactive App Panel */
         .app-panel {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
+            padding: 40px 20px 100px 20px;
             background: #ffffff;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            transition: padding-bottom 0.3s ease;
         }
 
         .content-box {
             width: 100%;
             max-width: 440px;
             text-align: center;
+            transition: transform 0.3s ease;
         }
 
+        /* Branding Text */
         .brand-header {
             margin-bottom: 24px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .mobile-logo-img {
+            display: none;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--brand-primary-teal);
+            margin: 0 auto 12px auto;
         }
 
         .brand-title {
             font-size: 36px;
             font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
         }
 
         .brand-title .mama { color: var(--brand-dark-teal); }
@@ -90,27 +129,63 @@
             margin-top: 6px;
         }
 
-        .role-card {
+        /* Selection Screen Options */
+        .role-option-card {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             padding: 16px;
             background: var(--brand-bg);
             border: 2px solid #d1d5db;
-            border-radius: 12px;
-            margin-bottom: 12px;
+            border-radius: 14px;
+            margin-bottom: 14px;
             cursor: pointer;
+            transition: all 0.2s ease;
             text-align: left;
         }
 
-        .role-card.selected {
+        .role-option-card:hover, .role-option-card.selected {
             border-color: var(--brand-primary-teal);
             background: var(--brand-light-teal);
         }
 
+        .role-option-card input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--brand-primary-teal);
+        }
+
+        .role-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--brand-dark-teal);
+        }
+
+        .role-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Alert Banner */
+        .notice-box {
+            background-color: #fff8e6;
+            border: 1.5px solid #ffe08a;
+            color: #8a5300;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        /* Form Controls */
         .form-group {
             text-align: left;
             margin-bottom: 16px;
+            scroll-margin-top: 20px;
         }
 
         .form-group label {
@@ -128,9 +203,67 @@
             border-radius: 12px;
             font-size: 16px;
             outline: none;
+            transition: all 0.2s ease;
             background-color: #fff;
+            cursor: pointer;
         }
 
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--brand-primary-teal);
+            box-shadow: 0 0 0 3px rgba(20, 123, 150, 0.15);
+        }
+
+        .gps-panel {
+            margin-bottom: 16px;
+        }
+
+        .btn-gps {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--brand-primary-teal);
+            border-radius: 12px;
+            background-color: var(--brand-light-teal);
+            color: var(--brand-dark-teal);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-gps:hover {
+            background-color: var(--brand-primary-teal);
+            color: #ffffff;
+            border-color: var(--brand-primary-teal);
+        }
+
+        .btn-gps:disabled {
+            background-color: #9ca3af;
+            border-color: #9ca3af;
+            color: #ffffff;
+            cursor: not-allowed;
+        }
+
+        .location-status {
+            min-height: 18px;
+            margin-top: 6px;
+            font-size: 12px;
+            line-height: 1.35;
+            color: var(--text-muted);
+        }
+
+        .location-status.error { color: #dc3545; }
+        .location-status.success { color: #1e7e34; }
+
+        .amount-display {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--brand-orange);
+            text-align: center;
+            background-color: var(--brand-light-teal);
+            border: 1.5px solid var(--brand-primary-teal);
+        }
+
+        /* Buttons */
         .btn-primary {
             width: 100%;
             padding: 16px;
@@ -141,7 +274,23 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
             margin-top: 8px;
+            box-shadow: 0 6px 16px rgba(231, 91, 67, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #d04d36;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            background-color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
         }
 
         .btn-text {
@@ -152,154 +301,1096 @@
             cursor: pointer;
             margin-top: 14px;
             width: 100%;
+            text-align: center;
             text-decoration: underline;
         }
 
+        /* Views */
         .hidden { display: none !important; }
 
+        /* Pop-up Input Modal (Like Select Picker) */
+        .input-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(13, 92, 117, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 60px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .input-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .input-modal-card {
+            background: #ffffff;
+            width: 90%;
+            max-width: 420px;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            transform: translateY(-20px);
+            transition: transform 0.25s ease;
+        }
+
+        .input-modal-overlay.active .input-modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--brand-dark-teal);
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--brand-primary-teal);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        /* Map UI */
+        .map-card {
+            position: relative;
+            height: 260px;
+            background: #dceef4;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid rgba(20, 123, 150, 0.2);
+        }
+
+        .map-card.booking-map {
+            height: 180px;
+            margin-top: 4px;
+        }
+
+        .location-map {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .map-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--brand-dark-teal);
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            background: #dceef4;
+        }
+
+        .map-expand-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            padding: 8px 10px;
+            border: 1px solid rgba(13, 92, 117, 0.25);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--brand-dark-teal);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(13, 92, 117, 0.18);
+            transition: all 0.2s ease;
+        }
+
+        .map-expand-btn:hover {
+            background: var(--brand-primary-teal);
+            color: #ffffff;
+            border-color: var(--brand-primary-teal);
+        }
+
+        .map-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(13, 92, 117, 0.72);
+            backdrop-filter: blur(4px);
+        }
+
+        .map-modal-card {
+            width: min(920px, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .map-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 20px 12px;
+        }
+
+        .map-modal-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--brand-dark-teal);
+        }
+
+        .map-modal-subtitle {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .map-modal-close {
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background: #f9fafb;
+            color: var(--brand-dark-teal);
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .map-modal-map {
+            height: min(58vh, 520px);
+            margin: 0 20px;
+            overflow: hidden;
+            border: 1px solid rgba(20, 123, 150, 0.2);
+            border-radius: 16px;
+            background: #dceef4;
+        }
+
+        .map-modal-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .map-details {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            padding: 16px 20px 20px;
+        }
+
+        .map-detail {
+            padding: 12px;
+            border: 1px solid rgba(20, 123, 150, 0.15);
+            border-radius: 12px;
+            background: var(--brand-bg);
+        }
+
+        .map-detail span {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .map-detail strong {
+            display: block;
+            margin-top: 4px;
+            font-size: 14px;
+            color: var(--brand-dark-teal);
+            overflow-wrap: anywhere;
+        }
+
+        .map-detail-link {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid rgba(20, 123, 150, 0.15);
+            border-radius: 12px;
+            background: var(--brand-light-teal);
+        }
+
+        .map-detail-link span {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .map-detail-link a {
+            color: var(--brand-primary-teal);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .map-detail-link a:hover {
+            text-decoration: underline;
+        }
+
+        body.map-modal-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 600px) {
+            .map-modal-overlay {
+                padding: 8px;
+            }
+
+            .map-modal-map {
+                height: 45vh;
+                margin: 0 12px;
+            }
+
+            .map-details {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+
+            .map-detail-link {
+                grid-column: 1;
+            }
+        }
+
+        /* Cleaner List */
+        .cleaner-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .cleaner-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: var(--brand-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cleaner-item:hover, .cleaner-item.selected {
+            border-color: var(--brand-primary-teal);
+            background: var(--brand-light-teal);
+        }
+
+        .cleaner-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--brand-dark-teal);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .details p {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: left;
+        }
+
+        .details span {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: block;
+            text-align: left;
+        }
+
+        .price-tag {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--brand-orange);
+            background: #fdf2f0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(231, 91, 67, 0.2);
+        }
+
+        /* Payment Status UI */
+        #status { 
+            margin-top: 14px; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-size: 0.9rem; 
+            line-height: 1.4; 
+            text-align: center;
+        } 
+
+        .success { background: #e6f4ea; color: #1e7e34; border: 1px solid #c3e6cb; } 
+        .error { background: #f8d7da; color: #dc3545; border: 1px solid #f5c6cb; } 
+        .info { background: var(--brand-light-teal); color: var(--brand-dark-teal); border: 1px solid rgba(20, 123, 150, 0.3); } 
+
+        .loader { 
+            display: inline-block; width: 16px; height: 16px; 
+            border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; 
+            border-radius: 50%; animation: spin 1s linear infinite; 
+            margin-right: 8px; vertical-align: middle; 
+        } 
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Responsive Mobile Layout */
         @media (max-width: 850px) {
-            .full-screen-container { flex-direction: column; }
-            .hero-banner { height: 25vh; flex: none; }
+            .full-screen-container {
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            .hero-banner {
+                flex: none;
+                height: 30vh;
+                padding: 15px;
+                border-right: none;
+                border-bottom: 1px solid rgba(20, 123, 150, 0.15);
+            }
+
+            .hero-banner.keyboard-open {
+                height: 0vh;
+                padding: 0;
+                opacity: 0;
+                overflow: hidden;
+                border-bottom: none;
+            }
+
+            .hero-image {
+                max-height: 90%;
+            }
+
+            .app-panel {
+                flex: 1;
+                padding: 24px 16px 120px 16px;
+                justify-content: flex-start;
+            }
+
+            .mobile-logo-img {
+                display: block;
+            }
+
+            .brand-title {
+                font-size: 28px;
+            }
+
+            body.keyboard-active .app-panel {
+                padding-bottom: 250px;
+            }
+            
+            body.keyboard-active .brand-header {
+                opacity: 0.3;
+                transform: scale(0.9);
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="full-screen-container">
-        <div class="hero-banner">
-            <img src="pic.png" alt="Mama Fua Services" class="hero-image">
+        <div class="hero-banner" id="heroBanner">
+            <img src="pic.png" alt="Mama Fua Cleaning Services" class="hero-image">
         </div>
 
-        <div class="app-panel">
+        <div class="app-panel" id="appPanel">
             <div class="content-box">
                 <div class="brand-header">
-                    <h1 class="brand-title"><span class="mama">Mama</span> <span class="fua">Fua</span></h1>
+                    <img src="pic.png" alt="Mama Fua Logo" class="mobile-logo-img">
+                    <h1 class="brand-title">
+                        <span class="mama">Mama</span> <span class="fua">Fua</span>
+                    </h1>
                     <p class="tagline">Clean Home. Fresh Life.</p>
                 </div>
 
-                <!-- Step 1: Select Role -->
-                <div id="step-role">
+                <!-- Step 0: Question / Selection Screen -->
+                <div id="selection-step">
                     <p style="font-size: 15px; font-weight: 700; color: var(--brand-dark-teal); margin-bottom: 16px;">
-                        Select your purpose:
+                        What brings you here today?
                     </p>
 
-                    <div class="role-card" id="card-cleaner" onclick="selectRole('cleaner')">
-                        <input type="radio" name="role" id="radio-cleaner">
+                    <label class="role-option-card" id="card-cleaner" onclick="selectRole('cleaner')">
+                        <input type="radio" name="userRole" value="cleaner">
                         <div>
-                            <strong>I am a Cleaner</strong>
-                            <p style="font-size: 12px; color: var(--text-muted);">Register to find cleaning jobs near you</p>
+                            <div class="role-title">Are you a cleaner finding work?</div>
+                            <div class="role-desc">Apply for available home cleaning tasks near you</div>
                         </div>
-                    </div>
+                    </label>
 
-                    <div class="role-card" id="card-boss" onclick="selectRole('boss')">
-                        <input type="radio" name="role" id="radio-boss">
+                    <label class="role-option-card" id="card-boss" onclick="selectRole('boss')">
+                        <input type="radio" name="userRole" value="boss">
                         <div>
-                            <strong>I am Hiring</strong>
-                            <p style="font-size: 12px; color: var(--text-muted);">Find professional cleaners for your home</p>
+                            <div class="role-title">Are you a boss finding a cleaner to hire?</div>
+                            <div class="role-desc">Book vetted cleaners to manage your laundry & home</div>
                         </div>
-                    </div>
+                    </label>
 
-                    <button class="btn-primary" onclick="goToDetails()">Next</button>
+                    <button class="btn-primary" onclick="proceedFromSelection()">Continue</button>
                 </div>
 
-                <!-- Step 2: Form Details -->
-                <div id="step-details" class="hidden">
-                    <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" placeholder="Enter full name">
+                <!-- Step 1A: Cleaner Registration Form -->
+                <div id="cleaner-form" class="hidden">
+                    <div class="notice-box">
+                        ⚠️ <strong>Notice:</strong> We currently have a shortage in free work slots with deposit. You should pay a deposit to guarantee job allocation.
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">Safaricom Phone Number</label>
-                        <input type="tel" id="phone" placeholder="0712345678">
+                        <label for="cleanerFullName">Your Full Name</label>
+                        <input type="text" id="cleanerFullName" placeholder="Tap to enter full name" readonly onclick="openModal('cleanerFullName', 'Enter Your Full Name', 'text', 'Enter your full name')">
                     </div>
 
-                    <div id="cleaner-options" class="hidden">
-                        <div class="form-group">
-                            <label for="tierSelect">Job Pay Tier</label>
-                            <select id="tierSelect">
-                                <option value="1000">KES 1,000 Job Category</option>
-                                <option value="1500">KES 1,500 Job Category</option>
-                                <option value="1800">KES 1,800 Job Category</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="cleanerPhone">Safaricom Phone Number</label>
+                        <input type="tel" id="cleanerPhone" placeholder="Tap to enter phone number" readonly onclick="openModal('cleanerPhone', 'Enter Safaricom Phone Number', 'tel', '0712345678')">
                     </div>
 
-                    <div id="boss-options" class="hidden">
-                        <div class="form-group">
-                            <label for="genderPref">Cleaner Gender Preference</label>
-                            <select id="genderPref">
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="jobPayTier">Select Target Job Pay (Required Deposit)</label>
+                        <select id="jobPayTier" onchange="updateCleanerDeposit()">
+                            <option value="1000">1000 KES Pay Work (50 Bob Deposit)</option>
+                            <option value="1500">1500 KES Pay Work (150 Bob Deposit)</option>
+                            <option value="1800">1800 KES Pay Work (200 Bob Deposit)</option>
+                        </select>
                     </div>
 
-                    <button class="btn-primary" onclick="submitDetails()">Submit Request</button>
-                    <button class="btn-text" onclick="showStep('step-role')">← Back</button>
+                    <button class="btn-primary" onclick="submitCleanerForm()">Proceed to Deposit Payment</button>
+                    <button class="btn-text" onclick="showSelectionStep()">← Back to options</button>
                 </div>
 
-                <!-- Step 3: Service Confirmation -->
-                <div id="step-confirmation" class="hidden">
-                    <div style="padding: 20px; background: var(--brand-light-teal); border-radius: 12px; text-align: left; margin-bottom: 16px;">
-                        <h3 style="color: var(--brand-dark-teal); margin-bottom: 8px;">Request Submitted</h3>
-                        <p style="font-size: 14px; color: var(--text-dark);" id="summaryText"></p>
+                <!-- Step 1B: Boss / Employer Booking Form -->
+                <div id="booking-form" class="hidden">
+                    <div class="form-group">
+                        <label for="fullName">Your Full Name</label>
+                        <input type="text" id="fullName" placeholder="Tap to enter full name" readonly onclick="openModal('fullName', 'Enter Your Full Name', 'text', 'Enter you full names')">
                     </div>
-                    <button class="btn-text" onclick="showStep('step-role')">← Start Over</button>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Safaricom Phone Number</label>
+                        <input type="tel" id="phoneNumber" placeholder="Tap to enter phone number" readonly onclick="openModal('phoneNumber', 'Enter Safaricom Phone Number', 'tel', '0712345678')">
+                    </div>
+
+                    <div class="form-group gps-panel">
+                        <label>Your Location (GPS)</label>
+                        <button type="button" class="btn-gps" id="locationButton" onclick="getCurrentLocation()">Use My Current Location</button>
+                        <p id="locationStatus" class="location-status" role="status" aria-live="polite"></p>
+                        <div class="map-card booking-map" id="bookingMapCard">
+                            <iframe id="bookingMap" class="location-map" title="Your current location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                            <button type="button" class="map-expand-btn" onclick="openLocationMap()" aria-label="Expand location map">Expand</button>
+                            <div id="bookingMapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Cleaner Gender Preference</label>
+                        <select id="gender">
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-primary" onclick="findCleaners()">Get Cleaner Now</button>
+                    <button class="btn-text" onclick="showSelectionStep()">← Back to options</button>
+                </div>
+
+                <!-- Step 2: Available Cleaners List (For Boss) -->
+                <div id="results-step" class="hidden">
+                    <div class="map-card">
+                        <iframe id="locationMap" class="location-map" title="Your exact location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                        <button type="button" class="map-expand-btn" onclick="openLocationMap()" aria-label="Expand location map">Expand</button>
+                        <div id="mapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
+                    </div>
+                    <p id="locationDisplay" style="text-align:center; font-size:13px; color:var(--brand-primary-teal); font-weight:600; margin-bottom:12px;"></p>
+
+                    <div class="cleaner-list" id="cleaners-container"></div>
+
+                    <button class="btn-primary" id="proceed-btn" onclick="goToPayment()">Pay Deposit & Get Cleaner</button>
+                    <button class="btn-text" onclick="resetForm()">← Change details</button>
+                </div>
+
+                <!-- Step 3: Shared M-Pesa Payment Screen -->
+                <div id="payment-step" class="hidden">
+                    <p style="font-size: 0.85rem; color: var(--brand-orange); font-weight: 600; margin-bottom: 12px; text-align: center;">
+                        Do not refresh the page after entering your M-Pesa PIN.<br>Wait for confirmation.
+                    </p>
+
+                    <div class="form-group">  
+                        <label for="amount">Deposit Amount (KES)</label>  
+                        <input type="text" id="amount" class="amount-display" readonly>  
+                    </div>  
+
+                    <div class="form-group">  
+                        <label for="payPhone">M-Pesa Phone Number</label>  
+                        <input type="text" id="payPhone" placeholder="Tap to edit phone number" readonly onclick="openModal('payPhone', 'Confirm M-Pesa Phone Number', 'tel', '0712345678')">  
+                    </div>  
+
+                    <button id="payBtn" class="btn-primary" onclick="handlePayment()">Pay with M-Pesa</button>  
+                    <div id="status"></div>
+                    <button class="btn-text" id="paymentBackBtn" onclick="backFromPayment()">← Go Back</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up Input Modal -->
+    <div class="input-modal-overlay" id="inputModal">
+        <div class="input-modal-card">
+            <h3 class="modal-title" id="modalTitle">Fill Field</h3>
+            <input type="text" id="modalInputField" class="modal-input" placeholder="">
+            <button class="btn-primary" onclick="saveModalInput()">Done</button>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div class="map-modal-overlay hidden" id="locationMapModal" role="dialog" aria-modal="true" aria-labelledby="locationMapModalTitle">
+        <div class="map-modal-card">
+            <div class="map-modal-header">
+                <div>
+                    <h3 id="locationMapModalTitle">Your Location</h3>
+                    <p class="map-modal-subtitle">Expanded map and GPS details</p>
+                </div>
+                <button type="button" class="map-modal-close" onclick="closeLocationMap()" aria-label="Close expanded map">×</button>
+            </div>
+            <div class="map-modal-map">
+                <iframe id="expandedLocationMap" title="Expanded current location" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+            </div>
+            <div class="map-details">
+                <div class="map-detail">
+                    <span>Coordinates</span>
+                    <strong id="expandedCoordinates">Not detected</strong>
+                </div>
+                <div class="map-detail">
+                    <span>Accuracy</span>
+                    <strong id="expandedAccuracy">Not available</strong>
+                </div>
+                <div class="map-detail">
+                    <span>Captured</span>
+                    <strong id="expandedCaptured">Not available</strong>
+                </div>
+                <div class="map-detail">
+                    <span>Location source</span>
+                    <strong>Device GPS</strong>
+                </div>
+                <div class="map-detail-link">
+                    <span>Open full map</span>
+                    <a id="expandedMapsLink" href="#" target="_blank" rel="noopener noreferrer">View in Google Maps</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let currentRole = null;
+        const BACKEND_URL = "https://tilo-three.vercel.app";
+        let pollTimer = null;
+        let activeTargetInputId = null;
+        let currentCoordinates = null;
+        let locationRequestInProgress = false;
+        let selectedRole = null;
 
+        /* Selection & Role Flow Management */
         function selectRole(role) {
-            currentRole = role;
-            document.getElementById('card-cleaner').classList.toggle('selected', role === 'cleaner');
-            document.getElementById('card-boss').classList.toggle('selected', role === 'boss');
-            document.getElementById('radio-cleaner').checked = (role === 'cleaner');
-            document.getElementById('radio-boss').checked = (role === 'boss');
+            selectedRole = role;
+            document.querySelectorAll('.role-option-card').forEach(card => card.classList.remove('selected'));
+            
+            if (role === 'cleaner') {
+                document.getElementById('card-cleaner').classList.add('selected');
+                document.getElementById('card-cleaner').querySelector('input').checked = true;
+            } else {
+                document.getElementById('card-boss').classList.add('selected');
+                document.getElementById('card-boss').querySelector('input').checked = true;
+            }
         }
 
-        function showStep(stepId) {
-            ['step-role', 'step-details', 'step-confirmation'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            document.getElementById(stepId).classList.remove('hidden');
+        function showSelectionStep() {
+            document.getElementById('selection-step').classList.remove('hidden');
+            document.getElementById('cleaner-form').classList.add('hidden');
+            document.getElementById('booking-form').classList.add('hidden');
+            document.getElementById('results-step').classList.add('hidden');
+            document.getElementById('payment-step').classList.add('hidden');
         }
 
-        function goToDetails() {
-            if (!currentRole) {
-                alert('Please select an option to proceed.');
+        function proceedFromSelection() {
+            if (!selectedRole) {
+                alert('Please tick whether you are a cleaner or a boss finding a cleaner.');
                 return;
             }
 
-            document.getElementById('cleaner-options').classList.toggle('hidden', currentRole !== 'cleaner');
-            document.getElementById('boss-options').classList.toggle('hidden', currentRole !== 'boss');
-            showStep('step-details');
+            document.getElementById('selection-step').classList.add('hidden');
+            if (selectedRole === 'cleaner') {
+                document.getElementById('cleaner-form').classList.remove('hidden');
+                updateCleanerDeposit();
+            } else {
+                document.getElementById('booking-form').classList.remove('hidden');
+            }
         }
 
-        function submitDetails() {
-            const name = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
+        /* Cleaner Tier Logic */
+        function updateCleanerDeposit() {
+            const payVal = document.getElementById('jobPayTier').value;
+            let deposit = 50;
+            if (payVal === "1500") deposit = 150;
+            if (payVal === "1800") deposit = 200;
+
+            document.getElementById('amount').value = deposit;
+        }
+
+        function submitCleanerForm() {
+            const name = document.getElementById('cleanerFullName').value.trim();
+            const phone = document.getElementById('cleanerPhone').value.trim();
 
             if (!name || !phone) {
-                alert('Please complete all required fields.');
+                alert('Please enter your full name and Safaricom phone number.');
                 return;
             }
 
-            const summary = document.getElementById('summaryText');
-            if (currentRole === 'cleaner') {
-                const tier = document.getElementById('tierSelect').value;
-                summary.innerHTML = `Thank you, <strong>${name}</strong>. Your application for the KES ${tier} category has been recorded. We will contact you at <strong>${phone}</strong> when matching work is available.`;
-            } else {
-                const gender = document.getElementById('genderPref').value;
-                summary.innerHTML = `Thank you, <strong>${name}</strong>. Your request for a ${gender} cleaner has been received. Our team will follow up via <strong>${phone}</strong>.`;
+            document.getElementById('payPhone').value = phone;
+            updateCleanerDeposit();
+
+            document.getElementById('cleaner-form').classList.add('hidden');
+            document.getElementById('payment-step').classList.remove('hidden');
+        }
+
+        /* Pop-up Modal Input Handler */
+        function openModal(inputId, titleText, inputType, placeholderText) {
+            activeTargetInputId = inputId;
+            const targetInput = document.getElementById(inputId);
+            const modal = document.getElementById('inputModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalInput = document.getElementById('modalInputField');
+
+            modalTitle.innerText = titleText;
+            modalInput.type = inputType;
+            modalInput.placeholder = placeholderText;
+            modalInput.value = targetInput.value;
+
+            modal.classList.add('active');
+            
+            setTimeout(() => {
+                modalInput.focus();
+            }, 100);
+        }
+
+        function saveModalInput() {
+            const modalInput = document.getElementById('modalInputField');
+            if (activeTargetInputId) {
+                const targetInput = document.getElementById(activeTargetInputId);
+                targetInput.value = modalInput.value;
+            }
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('inputModal').classList.remove('active');
+            activeTargetInputId = null;
+        }
+
+        document.getElementById('modalInputField').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                saveModalInput();
+            }
+        });
+
+        /* Mobile Virtual Keyboard Adjustments */
+        const inputFields = document.querySelectorAll('input, select');
+        const heroBanner = document.getElementById('heroBanner');
+
+        inputFields.forEach(input => {
+            input.addEventListener('focus', (e) => {
+                document.body.classList.add('keyboard-active');
+                if (window.innerWidth <= 850) {
+                    heroBanner.classList.add('keyboard-open');
+                }
+                
+                setTimeout(() => {
+                    e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+
+            input.addEventListener('blur', () => {
+                document.body.classList.remove('keyboard-active');
+                heroBanner.classList.remove('keyboard-open');
+            });
+        });
+
+        const femaleNames = [ 
+            "Sarah A.", "Elena L.", "Jessica T.", "Grace M.", "Mary W.",  
+            "Anita K.", "Faith N.", "Mercy C.", "Brenda O.", "Lucy K.", 
+            "Joy W.", "Caroline M.", "Esther N.", "Purity K.", "Alice M." 
+        ]; 
+
+        const maleNames = [ 
+            "Marcus K.", "David R.", "John P.", "Brian O.", "Kevin M.",  
+            "Samuel K.", "Peter N.", "Joseph M.", "Daniel W.", "James O.", 
+            "Alex K.", "Emmanuel N.", "Victor M.", "Dennis O.", "George K." 
+        ]; 
+
+        const prices = [150, 200, 240, 290, 320, 330]; 
+        let selectedPrice = prices[0]; 
+        let selectedCleanerName = "";
+
+        function shuffleArray(array) { 
+            return [...array].sort(() => Math.random() - 0.5); 
+        } 
+
+        function getInitials(name) { 
+            const parts = name.split(' '); 
+            return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase(); 
+        }
+
+        function setLocationStatus(message, type = "") {
+            const status = document.getElementById('locationStatus');
+            status.className = `location-status ${type}`.trim();
+            status.textContent = message;
+        }
+
+        function getCurrentLocation() {
+            const button = document.getElementById('locationButton');
+
+            if (!navigator.geolocation) {
+                setLocationStatus("Location is not supported by this browser.", "error");
+                return;
             }
 
-            showStep('step-confirmation');
+            if (locationRequestInProgress) return;
+
+            locationRequestInProgress = true;
+            button.disabled = true;
+            button.textContent = "Detecting...";
+            setLocationStatus("Finding your exact location...");
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = Number(position.coords.latitude.toFixed(6));
+                    const longitude = Number(position.coords.longitude.toFixed(6));
+                    const accuracy = Math.round(position.coords.accuracy);
+                    currentCoordinates = { latitude, longitude, accuracy, capturedAt: new Date().toISOString() };
+
+                    showLocationOnMap(latitude, longitude, accuracy);
+                    setLocationStatus(`Location detected • Accuracy: ±${accuracy} m`, "success");
+                    locationRequestInProgress = false;
+                    button.disabled = false;
+                    button.textContent = "Update Location";
+                },
+                (error) => {
+                    const messages = {
+                        1: "Location permission was denied. Allow GPS access to continue.",
+                        2: "Unable to determine your location. Check your GPS and try again.",
+                        3: "Location request timed out. Try again."
+                    };
+                    setLocationStatus(messages[error.code] || "Unable to detect your location.", "error");
+                    locationRequestInProgress = false;
+                    button.disabled = false;
+                    button.textContent = "Retry GPS";
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 60000
+                }
+            );
         }
-    </script>
-</body>
+
+        function showLocationOnMap(latitude, longitude, accuracy = 0) {
+            const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}&z=17&output=embed`;
+            const bookingMap = document.getElementById('bookingMap');
+            const locationMap = document.getElementById('locationMap');
+
+            bookingMap.src = mapUrl;
+            locationMap.src = mapUrl;
+            document.getElementById('bookingMapPlaceholder').classList.add('hidden');
+            document.getElementById('mapPlaceholder').classList.add('hidden');
+
+            const locationDisplay = document.getElementById('locationDisplay');
+            locationDisplay.textContent = `Exact GPS location: ${latitude}, ${longitude}${accuracy ? ` • Accuracy: ±${accuracy} m` : ''}`;
+        }
+
+        function openLocationMap() {
+            if (!currentCoordinates) {
+                setLocationStatus("Detect your GPS location before expanding the map.", "error");
+                return;
+            }
+
+            const { latitude, longitude, accuracy, capturedAt } = currentCoordinates;
+            const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}&z=16&output=embed`;
+            const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}`;
+
+            document.getElementById('expandedLocationMap').src = mapUrl;
+            document.getElementById('expandedCoordinates').textContent = `${latitude}, ${longitude}`;
+            document.getElementById('expandedAccuracy').textContent = `±${accuracy} m`;
+            document.getElementById('expandedCaptured').textContent = capturedAt ? new Date(capturedAt).toLocaleString() : "Not available";
+            document.getElementById('expandedMapsLink').href = mapsUrl;
+
+            const modal = document.getElementById('locationMapModal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('map-modal-open');
+        }
+
+        function closeLocationMap() {
+            const modal = document.getElementById('locationMapModal');
+            modal.classList.add('hidden');
+            document.body.classList.remove('map-modal-open');
+            document.getElementById('expandedLocationMap').src = '';
+        }
+
+        document.getElementById('locationMapModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeLocationMap();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !document.getElementById('locationMapModal').classList.contains('hidden')) {
+                closeLocationMap();
+            }
+        });
+
+        function findCleaners() {
+            const name = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phoneNumber').value.trim();
+            const gender = document.getElementById('gender').value;
+
+            if (!name || !phone) {
+                alert('Please fill in your name and phone number.');
+                return;
+            }
+
+            if (!currentCoordinates) {
+                setLocationStatus("Allow GPS access to continue.", "error");
+                getCurrentLocation();
+                return;
+            }
+
+            const pool = gender === 'female' ? femaleNames : maleNames;
+            const shuffled = shuffleArray(pool).slice(0, 6);
+
+            const container = document.getElementById('cleaners-container');
+            container.innerHTML = '';
+
+            shuffled.forEach((cleanerName, index) => {
+                const price = prices[index];
+                const rating = (4.7 + Math.random() * 0.3).toFixed(1);
+                const jobs = Math.floor(Math.random() * 150) + 20;
+
+                const card = document.createElement('div');
+                card.className = `cleaner-item ${index === 0 ? 'selected' : ''}`;
+                card.onclick = () => selectCleaner(card, price, cleanerName);
+
+                card.innerHTML = `
+                    <div class="cleaner-info">
+                        <div class="avatar">${getInitials(cleanerName)}</div>
+                        <div class="details">
+                            <p>${cleanerName}</p>
+                            <span>★ ${rating} (${jobs} jobs)</span>
+                        </div>
+                    </div>
+                    <div class="price-tag">KES ${price}</div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            selectedPrice = prices[0];
+            selectedCleanerName = shuffled[0];
+            updateProceedButtonText();
+            showLocationOnMap(currentCoordinates.latitude, currentCoordinates.longitude, currentCoordinates.accuracy);
+
+            document.getElementById('booking-form').classList.add('hidden');
+            document.getElementById('results-step').classList.remove('hidden');
+        }
+
+        function selectCleaner(element, price, cleanerName) { 
+            document.querySelectorAll('.cleaner-item').forEach(el => el.classList.remove('selected')); 
+            element.classList.add('selected'); 
+            selectedPrice = price; 
+            selectedCleanerName = cleanerName;
+            updateProceedButtonText(); 
+        } 
+
+        function updateProceedButtonText() { 
+            document.getElementById('proceed-btn').innerText = `Pay KES ${selectedPrice} Deposit & Get Cleaner`; 
+        } 
+
+        function goToPayment() {
+            const initialPhone = document.getElementById('phoneNumber').value.trim();
+            document.getElementById('payPhone').value = initialPhone;
+            document.getElementById('amount').value = selectedPrice;
+
+            document.getElementById('results-step').classList.add('hidden');
+            document.getElementById('payment-step').classList.remove('hidden');
+        }
+
+        function backFromPayment() {
+            document.getElementById('payment-step').classList.add('hidden');
+            document.getElementById('status').innerHTML = '';
+            document.getElementById('status').className = '';
+
+            if (selectedRole === 'cleaner') {
+                document.getElementById('cleaner-form').classList.remove('hidden');
+            } else {
+                document.getElementById('results-step').classList.remove('hidden');
+            }
+        }
+
+        function resetForm() { 
+            document.getElementById('booking-form').classList.remove('hidden'); 
+            document.getElementById('results-step').classList.add('hidden'); 
+        } 
+
+        /* M-Pesa Payment Handling */
+        function showStatus(message, type = "info") {  
+            const div = document.getElementById('status');  
+            div.className = type;  
+            div.innerHTML = message;  
+        }  
+      
+        function resetButton() {  
+            const btn = document.getElementById('payBtn');  
+            btn.disabled = false;  
+            btn.innerText = "Pay with M-Pesa";  
+        }  
+      
+        async function handlePayment() {  
+            const phone = document.getElementById('payPhone').value.trim();  
+            let amount = parseFloat(document.getElementById('amount').value);  
+            const btn = document.getElementById('payBtn');  
+      
+            if (!phone || phone.length < 9) {  
+                showStatus("❌ Please enter a valid phone number", "error");  
+                return;  
+            }  
+      
+            btn.disabled = true;  
+            btn.innerHTML = '<span class="loader"></span> Sending STK Push...';  
+            showStatus("STK Push sent.<br>Check your phone and enter M-Pesa PIN.", "info");  
+      
+            try {  
+                const res = await fetch(`${BACKEND_URL}/api/stk-push`, {  
+                    method: "POST",  
+                    headers: {  
+                        "Content-Type": "application/json",  
+                        "ngrok-skip-browser-warning": "true"  
+                    },  
+                    body: JSON.stringify({   
+                        amount: amount,   
+                        phone_number: phone,
+                        role: selectedRole,
+                        latitude: currentCoordinates ? currentCoordinates.latitude : null,
+                        longitude: currentCoordinates ? currentCoordinates.longitude : null,
+                        accuracy: currentCoordinates ? currentCoordinates.accuracy : null
+                    })  
+                });  
+      
+                const data = await res.json();  
+      
+                if (data.success) {  
+                    startPolling();  
+                } else {  
+                    showStatus("❌ Failed to start payment", "error");  
+                    resetButton();  
+                }  
+            } catch (err) {  
+                showStatus("❌ Connection error. Please check network.", "error");  
+                resetButton();  
+            }  
+        }  
+      
+        function startPolling() {  
+            let attempts = 0;  
+            const maxAttempts = 50;  
+      
+            if (pollTimer) clearInterval(pollTimer);  
+      
+            pollTimer = setInterval(async () => {  
+                attempts++;  
+      
+                try {  
+                    const res = await fetch(`${BACKEND_URL}/api/status`, {  
+                        headers: { "ngrok-skip-browser-warning": "true" }  
+                    });  
+      
+                    const data = await res.json();  
+      
+                    if (data.status === true && data.response) {  
+                        const code = data.response.ResultCode;  
+      
+                        if (code === 0) {  
+                            clearInterval(pollTimer);  
+                            if (selectedRole === 'cleaner') {
+                                showStatus("<strong>✅ Deposit Payment Received!</strong><br>Your job allocation request has been verified. Our agent will contact you shortly with work details.", "success");
+                            } else {
+                                showStatus(`<strong>✅ Successful!</strong><br>Cleaner <strong>${selectedCleanerName}</strong> has been assigned to you. Details sent via SMS.`, "success");  
+                            }
+                            const btn = document.getElementById('payBtn');
+                            btn.innerHTML = "Payment Complete";
+                            return;  
+                        }  
+                        else if (code === 1032) {  
+                            clearInterval(pollTimer);  
+                            showStatus("❌ Payment was cancelled.<br>Please try again.", "error");  
+                            resetButton();  
+                            return;  
+                        }  
+                        else {  
+                            clearInterval(pollTimer);  
+                            let msg = data.response.ResultDesc || "Payment failed";  
+                            if (code === 2001) msg = "Wrong M-Pesa PIN entered.";  
+                            showStatus(`❌ ${msg}`, "error");  
+                            resetButton();  
+                            return;  
+                        }  
+                    }  
+      
+                    if (attempts >= maxAttempts) {  
+                        clearInterval(pollTimer);  
+                        showStatus("⏰ Request timed out.<br>Check your M-Pesa or try again.", "error");  
+                        resetButton();  
+                    }  
+                } catch (err) {  
+                    console.error("Polling error:", err);  
+                }  
+            }, 3000);  
+        }  
+    </script> 
+</body> 
 </html>
