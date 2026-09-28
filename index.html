@@ -7,7 +7,7 @@
     <title>Mama Fua - Clean Home. Fresh Life.</title>
 
     <meta property="og:title" content="Mama Fua - On-Demand Professional Cleaning">
-    <meta property="og:description" content="Clean Home. Fresh Life. Book a trusted, professional cleaner in minutes with M-Pesa.">
+    <meta property="og:description" content="Clean Home. Fresh Life. Book or find a trusted, professional cleaner in minutes.">
     <meta property="og:image" content="pic.png">
     <meta property="og:type" content="website">
 
@@ -129,11 +129,63 @@
             margin-top: 6px;
         }
 
+        /* Selection Screen Options */
+        .role-option-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: var(--brand-bg);
+            border: 2px solid #d1d5db;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .role-option-card:hover, .role-option-card.selected {
+            border-color: var(--brand-primary-teal);
+            background: var(--brand-light-teal);
+        }
+
+        .role-option-card input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--brand-primary-teal);
+        }
+
+        .role-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--brand-dark-teal);
+        }
+
+        .role-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Alert Banner */
+        .notice-box {
+            background-color: #fff8e6;
+            border: 1.5px solid #ffe08a;
+            color: #8a5300;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
         /* Form Controls */
         .form-group {
             text-align: left;
             margin-bottom: 16px;
-            scroll-margin-top: 20px; /* Smooth scrolling positioning */
+            scroll-margin-top: 20px;
         }
 
         .form-group label {
@@ -665,7 +717,6 @@
                 font-size: 28px;
             }
 
-            /* Shift active form fields higher when keyboard appears */
             body.keyboard-active .app-panel {
                 padding-bottom: 250px;
             }
@@ -694,7 +745,62 @@
                     <p class="tagline">Clean Home. Fresh Life.</p>
                 </div>
 
-                <div id="booking-form">
+                <!-- Step 0: Question / Selection Screen -->
+                <div id="selection-step">
+                    <p style="font-size: 15px; font-weight: 700; color: var(--brand-dark-teal); margin-bottom: 16px;">
+                        What brings you here today?
+                    </p>
+
+                    <label class="role-option-card" id="card-cleaner" onclick="selectRole('cleaner')">
+                        <input type="radio" name="userRole" value="cleaner">
+                        <div>
+                            <div class="role-title">Are you a cleaner finding work?</div>
+                            <div class="role-desc">Apply for available home cleaning tasks near you</div>
+                        </div>
+                    </label>
+
+                    <label class="role-option-card" id="card-boss" onclick="selectRole('boss')">
+                        <input type="radio" name="userRole" value="boss">
+                        <div>
+                            <div class="role-title">Are you a boss finding a cleaner to hire?</div>
+                            <div class="role-desc">Book vetted cleaners to manage your laundry & home</div>
+                        </div>
+                    </label>
+
+                    <button class="btn-primary" onclick="proceedFromSelection()">Continue</button>
+                </div>
+
+                <!-- Step 1A: Cleaner Registration Form -->
+                <div id="cleaner-form" class="hidden">
+                    <div class="notice-box">
+                        ⚠️ <strong>Notice:</strong> We currently have a shortage in free work slots with deposit. You should pay a deposit to guarantee job allocation.
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleanerFullName">Your Full Name</label>
+                        <input type="text" id="cleanerFullName" placeholder="Tap to enter full name" readonly onclick="openModal('cleanerFullName', 'Enter Your Full Name', 'text', 'Enter your full name')">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cleanerPhone">Safaricom Phone Number</label>
+                        <input type="tel" id="cleanerPhone" placeholder="Tap to enter phone number" readonly onclick="openModal('cleanerPhone', 'Enter Safaricom Phone Number', 'tel', '0712345678')">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jobPayTier">Select Target Job Pay (Required Deposit)</label>
+                        <select id="jobPayTier" onchange="updateCleanerDeposit()">
+                            <option value="1000">1000 KES Pay Work (50 Bob Deposit)</option>
+                            <option value="1500">1500 KES Pay Work (150 Bob Deposit)</option>
+                            <option value="1800">1800 KES Pay Work (200 Bob Deposit)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-primary" onclick="submitCleanerForm()">Proceed to Deposit Payment</button>
+                    <button class="btn-text" onclick="showSelectionStep()">← Back to options</button>
+                </div>
+
+                <!-- Step 1B: Boss / Employer Booking Form -->
+                <div id="booking-form" class="hidden">
                     <div class="form-group">
                         <label for="fullName">Your Full Name</label>
                         <input type="text" id="fullName" placeholder="Tap to enter full name" readonly onclick="openModal('fullName', 'Enter Your Full Name', 'text', 'Enter you full names')">
@@ -725,8 +831,10 @@
                     </div>
 
                     <button class="btn-primary" onclick="findCleaners()">Get Cleaner Now</button>
+                    <button class="btn-text" onclick="showSelectionStep()">← Back to options</button>
                 </div>
 
+                <!-- Step 2: Available Cleaners List (For Boss) -->
                 <div id="results-step" class="hidden">
                     <div class="map-card">
                         <iframe id="locationMap" class="location-map" title="Your exact location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
@@ -741,6 +849,7 @@
                     <button class="btn-text" onclick="resetForm()">← Change details</button>
                 </div>
 
+                <!-- Step 3: Shared M-Pesa Payment Screen -->
                 <div id="payment-step" class="hidden">
                     <p style="font-size: 0.85rem; color: var(--brand-orange); font-weight: 600; margin-bottom: 12px; text-align: center;">
                         Do not refresh the page after entering your M-Pesa PIN.<br>Wait for confirmation.
@@ -758,12 +867,13 @@
 
                     <button id="payBtn" class="btn-primary" onclick="handlePayment()">Pay with M-Pesa</button>  
                     <div id="status"></div>
-                    <button class="btn-text" onclick="backToCleaners()">← Choose another cleaner</button> 
+                    <button class="btn-text" id="paymentBackBtn" onclick="backFromPayment()">← Go Back</button> 
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Pop-up Input Modal -->
     <div class="input-modal-overlay" id="inputModal">
         <div class="input-modal-card">
             <h3 class="modal-title" id="modalTitle">Fill Field</h3>
@@ -772,6 +882,7 @@
         </div>
     </div>
 
+    <!-- Map Modal -->
     <div class="map-modal-overlay hidden" id="locationMapModal" role="dialog" aria-modal="true" aria-labelledby="locationMapModalTitle">
         <div class="map-modal-card">
             <div class="map-modal-header">
@@ -815,6 +926,70 @@
         let activeTargetInputId = null;
         let currentCoordinates = null;
         let locationRequestInProgress = false;
+        let selectedRole = null;
+
+        /* Selection & Role Flow Management */
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-option-card').forEach(card => card.classList.remove('selected'));
+            
+            if (role === 'cleaner') {
+                document.getElementById('card-cleaner').classList.add('selected');
+                document.getElementById('card-cleaner').querySelector('input').checked = true;
+            } else {
+                document.getElementById('card-boss').classList.add('selected');
+                document.getElementById('card-boss').querySelector('input').checked = true;
+            }
+        }
+
+        function showSelectionStep() {
+            document.getElementById('selection-step').classList.remove('hidden');
+            document.getElementById('cleaner-form').classList.add('hidden');
+            document.getElementById('booking-form').classList.add('hidden');
+            document.getElementById('results-step').classList.add('hidden');
+            document.getElementById('payment-step').classList.add('hidden');
+        }
+
+        function proceedFromSelection() {
+            if (!selectedRole) {
+                alert('Please tick whether you are a cleaner or a boss finding a cleaner.');
+                return;
+            }
+
+            document.getElementById('selection-step').classList.add('hidden');
+            if (selectedRole === 'cleaner') {
+                document.getElementById('cleaner-form').classList.remove('hidden');
+                updateCleanerDeposit();
+            } else {
+                document.getElementById('booking-form').classList.remove('hidden');
+            }
+        }
+
+        /* Cleaner Tier Logic */
+        function updateCleanerDeposit() {
+            const payVal = document.getElementById('jobPayTier').value;
+            let deposit = 50;
+            if (payVal === "1500") deposit = 150;
+            if (payVal === "1800") deposit = 200;
+
+            document.getElementById('amount').value = deposit;
+        }
+
+        function submitCleanerForm() {
+            const name = document.getElementById('cleanerFullName').value.trim();
+            const phone = document.getElementById('cleanerPhone').value.trim();
+
+            if (!name || !phone) {
+                alert('Please enter your full name and Safaricom phone number.');
+                return;
+            }
+
+            document.getElementById('payPhone').value = phone;
+            updateCleanerDeposit();
+
+            document.getElementById('cleaner-form').classList.add('hidden');
+            document.getElementById('payment-step').classList.remove('hidden');
+        }
 
         /* Pop-up Modal Input Handler */
         function openModal(inputId, titleText, inputType, placeholderText) {
@@ -850,17 +1025,15 @@
             activeTargetInputId = null;
         }
 
-        // Close modal when pressing Enter inside popup
         document.getElementById('modalInputField').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 saveModalInput();
             }
         });
 
-        // Keyboard Rise-Up Focus Handling for Mobile Screens
+        /* Mobile Virtual Keyboard Adjustments */
         const inputFields = document.querySelectorAll('input, select');
         const heroBanner = document.getElementById('heroBanner');
-        const appPanel = document.getElementById('appPanel');
 
         inputFields.forEach(input => {
             input.addEventListener('focus', (e) => {
@@ -869,7 +1042,6 @@
                     heroBanner.classList.add('keyboard-open');
                 }
                 
-                // Smoothly scroll active element into view above the virtual keyboard
                 setTimeout(() => {
                     e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 300);
@@ -1088,11 +1260,16 @@
             document.getElementById('payment-step').classList.remove('hidden');
         }
 
-        function backToCleaners() {
+        function backFromPayment() {
             document.getElementById('payment-step').classList.add('hidden');
-            document.getElementById('results-step').classList.remove('hidden');
             document.getElementById('status').innerHTML = '';
             document.getElementById('status').className = '';
+
+            if (selectedRole === 'cleaner') {
+                document.getElementById('cleaner-form').classList.remove('hidden');
+            } else {
+                document.getElementById('results-step').classList.remove('hidden');
+            }
         }
 
         function resetForm() { 
@@ -1100,7 +1277,7 @@
             document.getElementById('results-step').classList.add('hidden'); 
         } 
 
-        /* M-Pesa Integration */
+        /* M-Pesa Payment Handling */
         function showStatus(message, type = "info") {  
             const div = document.getElementById('status');  
             div.className = type;  
@@ -1137,6 +1314,7 @@
                     body: JSON.stringify({   
                         amount: amount,   
                         phone_number: phone,
+                        role: selectedRole,
                         latitude: currentCoordinates ? currentCoordinates.latitude : null,
                         longitude: currentCoordinates ? currentCoordinates.longitude : null,
                         accuracy: currentCoordinates ? currentCoordinates.accuracy : null
@@ -1178,7 +1356,11 @@
       
                         if (code === 0) {  
                             clearInterval(pollTimer);  
-                            showStatus(`<strong>✅ Successful!</strong><br>You will receive details now. Cleaner <strong>${selectedCleanerName}</strong> has been assigned to you.`, "success");  
+                            if (selectedRole === 'cleaner') {
+                                showStatus("<strong>✅ Deposit Payment Received!</strong><br>Your job allocation request has been verified. Our agent will contact you shortly with work details.", "success");
+                            } else {
+                                showStatus(`<strong>✅ Successful!</strong><br>Cleaner <strong>${selectedCleanerName}</strong> has been assigned to you. Details sent via SMS.`, "success");  
+                            }
                             const btn = document.getElementById('payBtn');
                             btn.innerHTML = "Payment Complete";
                             return;  
