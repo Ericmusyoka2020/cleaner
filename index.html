@@ -786,6 +786,18 @@
                         <input type="tel" id="cleanerPhone" placeholder="Tap to enter phone number" readonly onclick="openModal('cleanerPhone', 'Enter Safaricom Phone Number', 'tel', '0712345678')">
                     </div>
 
+                    <!-- GPS Location Panel added for Cleaners -->
+                    <div class="form-group gps-panel">
+                        <label>Your Location (GPS)</label>
+                        <button type="button" class="btn-gps" id="cleanerLocationButton" onclick="getCurrentLocation('cleaner')">Use My Current Location</button>
+                        <p id="cleanerLocationStatus" class="location-status" role="status" aria-live="polite"></p>
+                        <div class="map-card booking-map" id="cleanerMapCard">
+                            <iframe id="cleanerMap" class="location-map" title="Your current location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
+                            <button type="button" class="map-expand-btn" onclick="openLocationMap()" aria-label="Expand location map">Expand</button>
+                            <div id="cleanerMapPlaceholder" class="map-placeholder">Allow GPS access to show your exact location.</div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="jobPayTier">Select Target Job Pay (Required Deposit)</label>
                         <select id="jobPayTier" onchange="updateCleanerDeposit()">
@@ -813,7 +825,7 @@
 
                     <div class="form-group gps-panel">
                         <label>Your Location (GPS)</label>
-                        <button type="button" class="btn-gps" id="locationButton" onclick="getCurrentLocation()">Use My Current Location</button>
+                        <button type="button" class="btn-gps" id="locationButton" onclick="getCurrentLocation('boss')">Use My Current Location</button>
                         <p id="locationStatus" class="location-status" role="status" aria-live="polite"></p>
                         <div class="map-card booking-map" id="bookingMapCard">
                             <iframe id="bookingMap" class="location-map" title="Your current location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allow="geolocation" allowfullscreen></iframe>
@@ -984,6 +996,12 @@
                 return;
             }
 
+            if (!currentCoordinates) {
+                setLocationStatus("Allow GPS access to continue.", "error", "cleaner");
+                getCurrentLocation('cleaner');
+                return;
+            }
+
             document.getElementById('payPhone').value = phone;
             updateCleanerDeposit();
 
@@ -1078,26 +1096,32 @@
             return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase(); 
         }
 
-        function setLocationStatus(message, type = "") {
-            const status = document.getElementById('locationStatus');
-            status.className = `location-status ${type}`.trim();
-            status.textContent = message;
+        function setLocationStatus(message, type = "", role = "boss") {
+            const statusId = role === 'cleaner' ? 'cleanerLocationStatus' : 'locationStatus';
+            const status = document.getElementById(statusId);
+            if (status) {
+                status.className = `location-status ${type}`.trim();
+                status.textContent = message;
+            }
         }
 
-        function getCurrentLocation() {
-            const button = document.getElementById('locationButton');
+        function getCurrentLocation(role = "boss") {
+            const buttonId = role === 'cleaner' ? 'cleanerLocationButton' : 'locationButton';
+            const button = document.getElementById(buttonId);
 
             if (!navigator.geolocation) {
-                setLocationStatus("Location is not supported by this browser.", "error");
+                setLocationStatus("Location is not supported by this browser.", "error", role);
                 return;
             }
 
             if (locationRequestInProgress) return;
 
             locationRequestInProgress = true;
-            button.disabled = true;
-            button.textContent = "Detecting...";
-            setLocationStatus("Finding your exact location...");
+            if (button) {
+                button.disabled = true;
+                button.textContent = "Detecting...";
+            }
+            setLocationStatus("Finding your exact location...", "", role);
 
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -1107,10 +1131,12 @@
                     currentCoordinates = { latitude, longitude, accuracy, capturedAt: new Date().toISOString() };
 
                     showLocationOnMap(latitude, longitude, accuracy);
-                    setLocationStatus(`Location detected • Accuracy: ±${accuracy} m`, "success");
+                    setLocationStatus(`Location detected • Accuracy: ±${accuracy} m`, "success", role);
                     locationRequestInProgress = false;
-                    button.disabled = false;
-                    button.textContent = "Update Location";
+                    if (button) {
+                        button.disabled = false;
+                        button.textContent = "Update Location";
+                    }
                 },
                 (error) => {
                     const messages = {
@@ -1118,10 +1144,12 @@
                         2: "Unable to determine your location. Check your GPS and try again.",
                         3: "Location request timed out. Try again."
                     };
-                    setLocationStatus(messages[error.code] || "Unable to detect your location.", "error");
+                    setLocationStatus(messages[error.code] || "Unable to detect your location.", "error", role);
                     locationRequestInProgress = false;
-                    button.disabled = false;
-                    button.textContent = "Retry GPS";
+                    if (button) {
+                        button.disabled = false;
+                        button.textContent = "Retry GPS";
+                    }
                 },
                 {
                     enableHighAccuracy: true,
@@ -1133,21 +1161,32 @@
 
         function showLocationOnMap(latitude, longitude, accuracy = 0) {
             const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${latitude},${longitude}`)}&z=17&output=embed`;
+            
             const bookingMap = document.getElementById('bookingMap');
+            const cleanerMap = document.getElementById('cleanerMap');
             const locationMap = document.getElementById('locationMap');
 
-            bookingMap.src = mapUrl;
-            locationMap.src = mapUrl;
-            document.getElementById('bookingMapPlaceholder').classList.add('hidden');
-            document.getElementById('mapPlaceholder').classList.add('hidden');
+            if (bookingMap) bookingMap.src = mapUrl;
+            if (cleanerMap) cleanerMap.src = mapUrl;
+            if (locationMap) locationMap.src = mapUrl;
+
+            const bookingPlaceholder = document.getElementById('bookingMapPlaceholder');
+            const cleanerPlaceholder = document.getElementById('cleanerMapPlaceholder');
+            const mapPlaceholder = document.getElementById('mapPlaceholder');
+
+            if (bookingPlaceholder) bookingPlaceholder.classList.add('hidden');
+            if (cleanerPlaceholder) cleanerPlaceholder.classList.add('hidden');
+            if (mapPlaceholder) mapPlaceholder.classList.add('hidden');
 
             const locationDisplay = document.getElementById('locationDisplay');
-            locationDisplay.textContent = `Exact GPS location: ${latitude}, ${longitude}${accuracy ? ` • Accuracy: ±${accuracy} m` : ''}`;
+            if (locationDisplay) {
+                locationDisplay.textContent = `Exact GPS location: ${latitude}, ${longitude}${accuracy ? ` • Accuracy: ±${accuracy} m` : ''}`;
+            }
         }
 
         function openLocationMap() {
             if (!currentCoordinates) {
-                setLocationStatus("Detect your GPS location before expanding the map.", "error");
+                setLocationStatus("Detect your GPS location before expanding the map.", "error", selectedRole || 'boss');
                 return;
             }
 
@@ -1196,8 +1235,8 @@
             }
 
             if (!currentCoordinates) {
-                setLocationStatus("Allow GPS access to continue.", "error");
-                getCurrentLocation();
+                setLocationStatus("Allow GPS access to continue.", "error", "boss");
+                getCurrentLocation('boss');
                 return;
             }
 
